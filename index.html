@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Noor Arfa – Request for Quotation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-900">
+  <main class="max-w-6xl mx-auto px-4 py-8">
+    <section class="bg-white shadow-sm rounded-2xl p-6">
+      <h2 class="text-lg font-semibold mb-4"># CUSTOMER INFORMATION</h2>
+      <form id="rfqForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="md:col-span-2">
+          <label for="fullName" class="block text-sm font-medium">Masukkan Full Name</label>
+          <input id="fullName" name="fullName" type="text" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2" />
+        </div>
+        <div>
+          <label for="email" class="block text-sm font-medium">Masukkan Email Address</label>
+          <input id="email" name="email" type="email" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2" />
+        </div>
+        <div>
+          <label for="phone" class="block text-sm font-medium">Masukkan Phone Number</label>
+          <input id="phone" name="phone" type="tel" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2" />
+        </div>
+        <div class="md:col-span-2">
+          <label for="company" class="block text-sm font-medium">Masukkan Nama Company/Organisasi</label>
+          <input id="company" name="company" type="text" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2" />
+        </div>
+        <div class="md:col-span-2">
+          <label for="address" class="block text-sm font-medium">Masukkan Alamat</label>
+          <textarea id="address" name="address" rows="3" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2"></textarea>
+        </div>
+
+        <!-- PIC -->
+        <div>
+          <label for="picName" class="block text-sm font-medium">Nama PIC</label>
+          <input id="picName" name="picName" type="text" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2" />
+        </div>
+        <div>
+          <label for="picRole" class="block text-sm font-medium">Jawatan</label>
+          <input id="picRole" name="picRole" type="text" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2" />
+        </div>
+
+        <div class="md:col-span-2 pt-4">
+          <h2 class="text-lg font-semibold mb-3"># SELECT YOUR BATIK PRODUCTS</h2>
+          <div class="flex flex-col sm:flex-row gap-3">
+            <label class="flex items-center gap-2 bg-gray-100 rounded-xl px-4 py-2">
+              <input type="radio" name="productMode" id="modeReady" value="ready" />
+              <span>Pilihan 1 — READY STOCK</span>
+            </label>
+            <label class="flex items-center gap-2 bg-gray-100 rounded-xl px-4 py-2">
+              <input type="radio" name="productMode" id="modeCustom" value="custom" />
+              <span>Pilihan 2 — CUSTOM (PRE ORDER)</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- READY STOCK -->
+        <div id="readySection" class="md:col-span-2 hidden">
+          <div class="mt-4">
+            <label class="block text-sm font-medium mb-2">Payment Method</label>
+            <div class="flex flex-wrap gap-3">
+              <label class="flex items-center gap-2 bg-white border rounded-xl px-3 py-2 cursor-pointer">
+                <input type="radio" name="paymentMethodReady" value="Cash" />
+                <span>Cash</span>
+              </label>
+              <label class="flex items-center gap-2 bg-white border rounded-xl px-3 py-2 cursor-pointer">
+                <input type="radio" name="paymentMethodReady" value="E-Perolehan" />
+                <span>E-Perolehan</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <div class="flex items-center justify-between gap-3">
+              <h3 class="font-semibold">Senarai Produk Ready Stock</h3>
+              <input id="readySearch" type="text" placeholder="Cari produk..." class="rounded-xl border-gray-300 px-3 py-2" />
+            </div>
+
+            <div id="readyList" class="grid sm:grid-cols-2 lg:grid-cols-2 gap-4 mt-4 max-h-[520px] overflow-auto pr-1"></div>
+
+            <div id="breakdownWrap" class="mt-6 hidden">
+              <h4 class="font-semibold mb-2">Pecahan Item</h4>
+              <div class="overflow-auto border rounded-xl">
+                <table class="min-w-full text-sm">
+                  <thead class="bg-gray-100">
+                    <tr>
+                      <th class="text-left px-3 py-2">Produk</th>
+                      <th class="text-left px-3 py-2">Warna</th>
+                      <th class="text-right px-3 py-2">Qty</th>
+                      <th class="text-right px-3 py-2">Harga/Unit</th>
+                      <th class="text-right px-3 py-2">Jumlah</th>
+                    </tr>
+                  </thead>
+                  <tbody id="breakdownBody"></tbody>
+                </table>
+              </div>
+
+              <div class="mt-4 grid sm:grid-cols-2 gap-4">
+                <div class="text-sm text-gray-600">
+                  <p><span class="font-medium">Payment:</span> <span id="bdPayment">—</span></p>
+                </div>
+                <div class="text-sm text-gray-700 space-y-1">
+                  <p class="flex justify-between"><span>Subtotal (Cash)</span> <span id="bdSubtotal" class="font-medium">RM0.00</span></p>
+                  <p class="flex justify-between"><span>Caj E‑Perolehan (15%)</span> <span id="bdFee" class="font-medium">RM0.00</span></p>
+                  <p class="flex justify-between text-lg"><span class="font-semibold">Grand Total</span> <span id="bdGrand" class="font-semibold">RM0.00</span></p>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-3 mt-4">
+              <button id="btnTotal" type="button" class="px-4 py-2 rounded-xl bg-purple-700 text-white">TOTAL</button>
+              <button id="btnRFQ" type="button" class="px-4 py-2 rounded-xl bg-gray-900 text-white" disabled>REQUEST FOR QUOTATION</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CUSTOM (PRE ORDER) -->
+        <div id="customSection" class="md:col-span-2 hidden">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+            <div>
+              <label class="block text-sm font-medium">Pilih Material</label>
+              <select id="c_material" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2">
+                <option value="">— Pilih —</option>
+                <option>Paris Crepe</option>
+                <option>Dubai Polycot</option>
+                <option>Luxe Satin</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium">Masukkan Corak</label>
+              <input id="c_pattern" type="text" placeholder="Contoh: Songket Flora Geometri" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium">Pilih Warna</label>
+              <input id="c_color" type="text" placeholder="Contoh: Royal Blue" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium">Meter</label>
+              <input id="c_meter" type="number" min="0" step="0.5" placeholder="cth 4" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium">Quantity</label>
+              <input id="c_qty" type="number" min="1" placeholder="cth 10" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium">Kod Produk</label>
+              <input id="c_code" type="text" placeholder="cth ZJ0001" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2" />
+            </div>
+
+            <div class="md:col-span-3">
+              <label class="block text-sm font-medium">Variasi Design</label>
+              <select id="c_variant" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2">
+                <option value="new">New Design (RM500)</option>
+                <option value="edit">Edit Design (RM150)</option>
+                <option value="recolor">Tukar Warna (RM50)</option>
+                <option value="logo">Tambah Logo/Nama Sendiri (RM100)</option>
+              </select>
+              <p class="text-xs text-gray-500 mt-1">Formula: caj design = harga variasi / qty; total (Cash) = (caj design × qty) + harga variasi.</p>
+            </div>
+          </div>
+
+          <div class="md:col-span-2 mt-4">
+            <label class="block text-sm font-medium mb-2">Payment Method</label>
+            <div class="flex flex-wrap gap-3">
+              <label class="flex items-center gap-2 bg-white border rounded-xl px-3 py-2 cursor-pointer">
+                <input type="radio" name="paymentMethodCustom" value="Cash" />
+                <span>Cash</span>
+              </label>
+              <label class="flex items-center gap-2 bg-white border rounded-xl px-3 py-2 cursor-pointer">
+                <input type="radio" name="paymentMethodCustom" value="E-Perolehan" />
+                <span>E-Perolehan</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-3 mt-4">
+            <button id="btnAddCustom" type="button" class="px-4 py-2 rounded-xl bg-gray-200">Tambah Item</button>
+            <button id="btnTotalCustom" type="button" class="px-4 py-2 rounded-xl bg-purple-700 text-white">TOTAL</button>
+            <button id="btnRFQCustom" type="button" class="px-4 py-2 rounded-xl bg-gray-900 text-white" disabled>REQUEST FOR QUOTATION</button>
+          </div>
+
+          <div id="customListWrap" class="mt-4 hidden">
+            <h4 class="font-semibold mb-2">Senarai Custom Ditambah</h4>
+            <div class="overflow-auto border rounded-xl">
+              <table class="min-w-full text-sm">
+                <thead class="bg-gray-100">
+                  <tr>
+                    <th class="text-left px-3 py-2">#</th>
+                    <th class="text-left px-3 py-2">Butiran</th>
+                    <th class="text-right px-3 py-2">Qty</th>
+                    <th class="text-right px-3 py-2">Harga Variasi</th>
+                    <th class="text-right px-3 py-2">Caj Design</th>
+                    <th class="text-right px-3 py-2">Jumlah (Cash)</th>
+                    <th class="px-3 py-2"></th>
+                  </tr>
+                </thead>
+                <tbody id="customListBody"></tbody>
+              </table>
+            </div>
+
+            <div class="mt-4 grid sm:grid-cols-2 gap-4">
+              <div class="text-sm text-gray-600">
+                <p><span class="font-medium">Payment:</span> <span id="cbdPayment">—</span></p>
+              </div>
+              <div class="text-sm text-gray-700 space-y-1">
+                <p class="flex justify-between"><span>Subtotal (Cash)</span> <span id="cbdSubtotal" class="font-medium">RM0.00</span></p>
+                <p class="flex justify-between"><span>Caj E‑Perolehan (15%)</span> <span id="cbdFee" class="font-medium">RM0.00</span></p>
+                <p class="flex justify-between text-lg"><span class="font-semibold">Grand Total</span> <span id="cbdGrand" class="font-semibold">RM0.00</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <!-- QUOTATION (format contoh penuh) -->
+    <section id="quotationSection" class="bg-white shadow-sm rounded-2xl p-6 mt-8 hidden print:block">
+      <div class="text-center mb-2">
+        <img src="logo-noorarfa.jpg" alt="Noor Arfa" class="mx-auto h-10 mb-2">
+        <p class="font-semibold tracking-wide">NOOR ARFA ONLINE EMPIRE SDN BHD</p>
+        <p class="text-sm">202101009431 (1409730-X)</p>
+        <p class="text-sm">LOT 4153, KAWASAN PERINDUSTRIAN CHENDERING, 21080 KUALA TERENGGANU, TERENGGANU DARUL IMAN, MALAYSIA.</p>
+      </div>
+
+      <h2 class="text-xl font-bold text-center my-3">INVOICE</h2>
+
+      <div class="grid md:grid-cols-2 gap-4 text-sm mb-2">
+        <div class="border p-3 rounded">
+          <p id="qCustLine1">—</p>
+          <p id="qCustLine2">—</p>
+          <p id="qCustLine3">—</p>
+          <p id="qCustLine4">—</p>
+        </div>
+        <div class="border p-3 rounded">
+          <div class="flex justify-between"><span>INVOICE NO</span><span id="qInvNo">—</span></div>
+          <div class="flex justify-between"><span>DATE</span><span id="qDate">—</span></div>
+          <div class="flex justify-between"><span>REFERENCE</span><span id="qRef">—</span></div>
+          <div class="flex justify-between"><span>TERM</span><span id="qTerm">30 DAYS</span></div>
+          <div class="flex justify-between"><span>SALESPERSON</span><span id="qSales">CA</span></div>
+        </div>
+      </div>
+
+      <div class="overflow-auto border rounded-xl">
+        <table class="min-w-full text-sm invoice-table">
+          <thead>
+            <tr>
+              <th>NO</th>
+              <th>ITEM CODE</th>
+              <th>DESCRIPTION</th>
+              <th>QTY</th>
+              <th>UOM</th>
+              <th>UNIT PRICE</th>
+              <th>AMOUNT</th>
+            </tr>
+          </thead>
+          <tbody id="qBody"></tbody>
+        </table>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-4 mt-3 text-sm">
+        <div class="border rounded p-3">
+          <div class="flex items-start gap-2">
+            <span class="whitespace-nowrap">RINGGIT MALAYSIA:</span>
+            <span id="qInWords" class="font-medium">—</span>
+          </div>
+          <div class="mt-2 text-xs text-gray-500">Customer Signature/Customer's Stamp</div>
+        </div>
+        <div class="border rounded p-3">
+          <div class="flex justify-between"><span>DISCOUNT :</span><span id="qDiscount">0.00</span></div>
+          <div class="flex justify-between text-lg font-semibold mt-1"><span>TOTAL :</span><span id="qGrand">RM0.00</span></div>
+        </div>
+      </div>
+
+      <div class="mt-3 text-sm space-y-1">
+        <p>BANK NO: <span>563019300868 (MAYBANK SDN BHD MBB868)</span></p>
+        <p>BANK NAME: <span>MAYBANK SDN BHD</span></p>
+        <p>BANK HOLDER: <span>NOOR ARFA ONLINE EMPIRE SDN BHD</span></p>
+      </div>
+
+      <!-- Tandatangan: Customer kiri, Staf kanan -->
+      <div class="mt-3 grid md:grid-cols-2 gap-6">
+        <div class="border rounded p-3">
+          <div class="h-20"></div>
+          <div class="border-t pt-2 text-sm">
+            <p class="text-gray-600">Customer Signature/Customer's Stamp</p>
+          </div>
+        </div>
+        <div class="border rounded p-3">
+          <div class="h-20"></div>
+          <div class="border-t pt-2 text-right text-sm">
+            <p id="qStaff">ANIS SOLEHAH (PEGAWAI WEBSITE)</p>
+            <p>NOOR ARFA HOLDINGS SDN BHD</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-right text-xs text-gray-500 mt-2">Page 1 of 1</div>
+
+      <div class="mt-4 no-print">
+        <button onclick="window.print()" class="px-4 py-2 rounded-xl bg-purple-700 text-white">Print / Save PDF</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // ===== DATA READY =====
+    const READY_PRODUCTS = [
+      { name:"BATIK AYUNI (DUBAI CREPE)", colors:["Grey","Green","Pink","Royal Blue","Brick Red"], pricing:q=>(q>=10?90:q>=5?109:119) },
+      { name:"BATIK NURA (DUBAI CREPE)", colors:["Grey","Lavender","Pink","Olive Green","Royal Blue"], pricing:q=>(q>=10?90:q>=5?109:119) },
+      { name:"BATIK AFIYA (DUBAI CREPE)", colors:["Grey","Burgundy","Plum","Olive Green","Navy Blue"], pricing:q=>(q>=10?90:q>=5?109:119) },
+      { name:"BATIK MARSYA (DUBAI CREPE)", colors:["Moss Green","Red","Violet Purple","Royal Blue","Grey"], pricing:q=>(q>=10?90:q>=5?109:119) },
+      { name:"KAIN PASANG NONEE (ROYAL SATIN)", colors:["Emerald Green","Royal Blue"], pricing:q=>(q>=10?119:q>=5?139:159) },
+      { name:"KAIN PASANG NURISHA (ROYAL SATIN)", colors:["Black"], pricing:q=>109 },
+      { name:"KAIN PASANG MICRO COTTON - 4M BIDANG 60", colors:["Royal Blue"], pricing:q=>99 },
+      { name:"KAIN PASANG MARIA POLY COTTON - 4M BIDANG 59", colors:["Black"], pricing:q=>(q>=10?79:q>=5?89:99) },
+      { name:"KAIN PASANG PERSIAN CREPE - 4M BIDANG 60", colors:["Chili Red"], pricing:q=>99 },
+      { name:"KAIN PASANG PARIS CREPE BATIK SARA - 4M BIDANG 60", colors:["Maroon","Black"], pricing:q=>(q>=10?129:q>=5?139:149) },
+      { name:"KAIN PASANG HANIFARA (TWILLY VELVET) - 4M BIDANG 55", colors:["Light Pink","Matcha","Light Peach","Soft Grey","Sky Blue","Yellow","Butter Yellow","Peach Pink","Lilac","Orange"], pricing:q=>(q>=5?45:55) },
+      { name:"KAIN PASANG AIRA/ALYA/DHIA (ITALIAN CREPE) - 4M BIDANG 60", colors:["Maroon","Purple","Blue","Black","Greenish Yellow","Deep Blue","Green","Mustard"], pricing:q=>70 },
+      { name:"KAIN PASANG SWISS SATIN - 4M BIDANG 60", colors:["Royal Blue","Maroon","Emerald Green","Black","Soft Brown"], pricing:q=>(q>=10?99:q>=5?109:q>=3?119:129) },
+      { name:"KAIN PASANG LILY (FRENCH CREPE) - 4M BIDANG 60", colors:["Black","Maroon","Olive Green","Purple Violet","Rose Pink"], pricing:q=>(q>=10?89:99) },
+    ];
+    const E_PEROLEHAN_RATE = 0.15;
+
+    // ===== DOM =====
+    const modeReady = document.getElementById('modeReady');
+    const modeCustom = document.getElementById('modeCustom');
+    const readySection = document.getElementById('readySection');
+    const customSection = document.getElementById('customSection');
+
+    const readyList = document.getElementById('readyList');
+    const readySearch = document.getElementById('readySearch');
+    const btnTotal = document.getElementById('btnTotal');
+    const btnRFQ = document.getElementById('btnRFQ');
+
+    const breakdownWrap = document.getElementById('breakdownWrap');
+    const breakdownBody = document.getElementById('breakdownBody');
+    const bdPayment = document.getElementById('bdPayment');
+    const bdSubtotal = document.getElementById('bdSubtotal');
+    const bdFee = document.getElementById('bdFee');
+    const bdGrand = document.getElementById('bdGrand');
+
+    const quotationSection = document.getElementById('quotationSection');
+    const qBody = document.getElementById('qBody');
+    const qInvNo = document.getElementById('qInvNo');
+    const qDate = document.getElementById('qDate');
+    const qRef = document.getElementById('qRef');
+    const qTerm = document.getElementById('qTerm');
+    const qSales = document.getElementById('qSales');
+    const qInWords = document.getElementById('qInWords');
+    const qGrand = document.getElementById('qGrand');
+
+    const fmtRM = n => 'RM' + Number(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+    function toggleSections() {
+      const mode = document.querySelector('input[name="productMode"]:checked')?.value;
+      readySection.classList.toggle('hidden', mode !== 'ready');
+      customSection.classList.toggle('hidden', mode !== 'custom');
+    }
+    modeReady.addEventListener('change', toggleSections);
+    modeCustom.addEventListener('change', toggleSections);
+
+    // ===== READY: bina kad produk =====
+    function priceHint(prod){
+      const s1 = prod.pricing(1), s5 = prod.pricing(5), s10 = prod.pricing(10);
+      if (s1 !== s5 || s5 !== s10) return `Harga: 1–4 ${fmtRM(s1)} | 5–9 ${fmtRM(s5)} | ≥10 ${fmtRM(s10)}`;
+      return "Harga: " + fmtRM(s1) + " /pasang";
+    }
+    function buildProductCard(prod, index) {
+      const card = document.createElement('div');
+      card.className = "border rounded-xl p-4 bg-white";
+      card.dataset.index = index;
+      card.innerHTML = `
+        <p class="font-semibold mb-2">${prod.name}</p>
+        <label class="block text-sm font-medium">Pilih Warna</label>
+        <select class="w-full border rounded-xl mb-2 px-3 py-2">
+          ${prod.colors.map(c=>`<option>${c}</option>`).join('')}
+        </select>
+        <p class="text-sm mb-2 text-gray-700">${priceHint(prod)}</p>
+        <label class="block text-sm font-medium">Quantity</label>
+        <input type="number" min="0" placeholder="0" class="w-full border rounded-xl px-3 py-2" />
+      `;
+      return card;
+    }
+    function renderProducts(list = READY_PRODUCTS) {
+      readyList.innerHTML = list.map((p,i)=>buildProductCard(p,i).outerHTML).join('');
+    }
+    renderProducts();
+    readySearch?.addEventListener('input', () => {
+      const q = readySearch.value.toLowerCase();
+      const filtered = READY_PRODUCTS.filter(p => p.name.toLowerCase().includes(q));
+      renderProducts(filtered);
+    });
+
+    function collectSelections() {
+      const cards = [...readyList.querySelectorAll('[data-index]')];
+      const items = [];
+      cards.forEach(card => {
+        const idx = Number(card.dataset.index);
+        const prod = READY_PRODUCTS[idx];
+        const color = card.querySelector('select').value;
+        const qtyVal = Number(card.querySelector('input[type="number"]').value || 0);
+        if (qtyVal > 0) {
+          const unit = prod.pricing(qtyVal);
+          const amount = unit * qtyVal;
+          items.push({ name: prod.name, color, qty: qtyVal, unit, amount });
+        }
+      });
+      return items;
+    }
+    const currentPayment = () => document.querySelector('input[name="paymentMethodReady"]:checked')?.value || null;
+    function computeTotals(items, payment) {
+      const subtotal = items.reduce((s,i)=> s + i.amount, 0);
+      const fee = payment === 'E-Perolehan' ? subtotal * E_PEROLEHAN_RATE : 0;
+      const grand = subtotal + fee;
+      return { subtotal, fee, grand };
+    }
+    function updateBreakdownUI(items, totals, payment) {
+      breakdownBody.innerHTML = items.map(it=>`
+        <tr>
+          <td class="px-3 py-2">${it.name}</td>
+          <td class="px-3 py-2">${it.color}</td>
+          <td class="px-3 py-2 text-right">${it.qty}</td>
+          <td class="px-3 py-2 text-right">${fmtRM(it.unit)}</td>
+          <td class="px-3 py-2 text-right">${fmtRM(it.amount)}</td>
+        </tr>`).join('');
+      bdPayment.textContent = payment || '—';
+      bdSubtotal.textContent = fmtRM(totals.subtotal);
+      bdFee.textContent = fmtRM(totals.fee);
+      bdGrand.textContent = fmtRM(totals.grand);
+      breakdownWrap.classList.toggle('hidden', items.length === 0);
+      btnRFQ.disabled = items.length === 0;
+    }
+    btnTotal.addEventListener('click', () => {
+      const pay = currentPayment();
+      const items = collectSelections();
+      const totals = computeTotals(items, pay);
+      updateBreakdownUI(items, totals, pay);
+      if (items.length) breakdownWrap.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // ===== CUSTOM LOGIC =====
+    const VARIANT_PRICE = { new:500, edit:150, recolor:50, logo:100 };
+    const btnAddCustom = document.getElementById('btnAddCustom');
+    const btnTotalCustom = document.getElementById('btnTotalCustom');
+    const btnRFQCustom = document.getElementById('btnRFQCustom');
+    const customListWrap = document.getElementById('customListWrap');
+    const customListBody = document.getElementById('customListBody');
+    const cbdPayment = document.getElementById('cbdPayment');
+    const cbdSubtotal = document.getElementById('cbdSubtotal');
+    const cbdFee = document.getElementById('cbdFee');
+    const cbdGrand = document.getElementById('cbdGrand');
+
+    const c_material = document.getElementById('c_material');
+    const c_pattern  = document.getElementById('c_pattern');
+    const c_color    = document.getElementById('c_color');
+    const c_meter    = document.getElementById('c_meter');
+    const c_qty      = document.getElementById('c_qty');
+    const c_code     = document.getElementById('c_code');
+    const c_variant  = document.getElementById('c_variant');
+
+    let customItems = [];
+    const currentPaymentCustom = () => document.querySelector('input[name="paymentMethodCustom"]:checked')?.value || null;
+
+    function addCustomItem(){
+      const qty = Number(c_qty.value || 0);
+      const meter = Number(c_meter.value || 0);
+      if (!c_material.value || !c_pattern.value || !c_color.value || !qty || qty<=0) {
+        alert('Sila lengkapkan Material, Corak, Warna dan Quantity (>0).');
+        return;
+      }
+      const vp = VARIANT_PRICE[c_variant.value] || 0;
+
+      // FORMULA: caj design = harga variasi / qty
+      // total (Cash) = (caj design × qty) + harga variasi
+      const designCharge = qty ? (vp / qty) : 0;
+      const totalCash = (designCharge * qty) + vp;
+
+      customItems.push({
+        material: c_material.value,
+        pattern: c_pattern.value,
+        color: c_color.value,
+        meter,
+        qty,
+        code: c_code.value || '—',
+        variant: c_variant.value,
+        variantText: c_variant.options[c_variant.selectedIndex].text,
+        variantPrice: vp,
+        designCharge,
+        totalCash
+      });
+
+      c_meter.value = ''; c_qty.value = ''; c_code.value = '';
+      renderCustomList();
+    }
+    function renderCustomList(){
+      customListBody.innerHTML = customItems.map((it,idx)=>`
+        <tr>
+          <td class="px-3 py-2">${idx+1}</td>
+          <td class="px-3 py-2">
+            <div class="font-medium">${it.material} — ${it.pattern} (${it.color})</div>
+            <div class="text-xs text-gray-500">Meter: ${it.meter || 0} | Kod: ${it.code} | Variasi: ${it.variantText}</div>
+          </td>
+          <td class="px-3 py-2 text-right">${it.qty}</td>
+          <td class="px-3 py-2 text-right">${fmtRM(it.variantPrice)}</td>
+          <td class="px-3 py-2 text-right">${fmtRM(it.designCharge)}</td>
+          <td class="px-3 py-2 text-right">${fmtRM(it.totalCash)}</td>
+          <td class="px-3 py-2 text-right">
+            <button class="text-red-600 underline" data-del="${idx}">Delete</button>
+          </td>
+        </tr>`).join('');
+      customListWrap.classList.toggle('hidden', customItems.length===0);
+      btnRFQCustom.disabled = customItems.length===0;
+    }
+    // Delete via event delegation
+    customListBody.addEventListener('click', (e)=>{
+      const idx = e.target?.dataset?.del;
+      if (idx !== undefined) {
+        customItems.splice(Number(idx), 1);
+        renderCustomList();
+      }
+    });
+
+    function computeTotalsCustom(items, payment){
+      const subtotal = items.reduce((s,i)=> s + i.totalCash, 0);
+      const fee = payment === 'E-Perolehan' ? subtotal * E_PEROLEHAN_RATE : 0;
+      const grand = subtotal + fee;
+      return {subtotal, fee, grand};
+    }
+    btnAddCustom?.addEventListener('click', addCustomItem);
+    btnTotalCustom?.addEventListener('click', () => {
+      const pay = currentPaymentCustom();
+      if (!pay) { alert('Sila pilih Payment Method (Cash atau E‑Perolehan).'); return; }
+      const totals = computeTotalsCustom(customItems, pay);
+      cbdPayment.textContent = pay;
+      cbdSubtotal.textContent = fmtRM(totals.subtotal);
+      cbdFee.textContent = fmtRM(totals.fee);
+      cbdGrand.textContent = fmtRM(totals.grand);
+      if (customItems.length) { customListWrap.classList.remove('hidden'); customListWrap.scrollIntoView({behavior:'smooth'}); }
+    });
+    btnRFQCustom?.addEventListener('click', () => {
+      const pay = currentPaymentCustom();
+      if (!customItems.length) return;
+      const totals = computeTotalsCustom(customItems, pay);
+      const itemsForInvoice = customItems.map(ci => ({
+        name: `${ci.material} – ${ci.pattern} (${ci.color}) [${ci.variantText}]`,
+        color: '-',
+        qty: ci.qty,
+        unit: ci.designCharge,
+        amount: ci.totalCash
+      }));
+      populateQuotation(itemsForInvoice, totals, pay);
+    });
+
+    // ===== RFQ READY =====
+    btnRFQ.addEventListener('click', () => {
+      const pay = currentPayment();
+      const items = collectSelections();
+      if (!items.length) { alert('Sila masukkan quantity untuk sekurang-kurangnya satu produk.'); return; }
+      const totals = computeTotals(items, pay);
+      populateQuotation(items, totals, pay);
+    });
+
+    // ===== Quotation Populate =====
+    function populateQuotation(items, totals, payment) {
+      const name = document.getElementById('fullName').value || '';
+      const company = document.getElementById('company').value || '';
+      const address = (document.getElementById('address').value || '').split('\n');
+      const email = document.getElementById('email').value || '';
+      const phone = document.getElementById('phone').value || '';
+      const picName = document.getElementById('picName')?.value || '';
+      const picRole = document.getElementById('picRole')?.value || '';
+
+      document.getElementById('qCustLine1').textContent = company || name || '—';
+      document.getElementById('qCustLine2').textContent = address[0] || '—';
+      document.getElementById('qCustLine3').textContent = address[1] || (email ? email : '—');
+      document.getElementById('qCustLine4').textContent = phone ? phone : (address[2]||'—');
+
+      const now = new Date(); const pad = n => String(n).padStart(2,'0');
+      qInvNo.textContent = `IV-NAE${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}${pad(now.getHours())}${pad(now.getMinutes())}`;
+      qDate.textContent = `${pad(now.getDate())}/${pad(now.getMonth()+1)}/${now.getFullYear()} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+      qRef.textContent = payment || 'CASH';
+      qTerm.textContent = '30 DAYS';
+      qSales.textContent = 'CA';
+
+      qBody.innerHTML = items.map((it, idx)=>`
+        <tr>
+          <td>${idx+1}</td>
+          <td>—</td>
+          <td>${it.name}${it.color && it.color!=='-' ? ' ('+it.color+')':''}</td>
+          <td class="text-right">${it.qty}</td>
+          <td>UNIT</td>
+          <td class="text-right">${fmtRM(it.unit)}</td>
+          <td class="text-right">${fmtRM(it.amount)}</td>
+        </tr>`).join('');
+
+      qInWords.textContent = totals.grand>0 ? (toWordsEN(Math.round(totals.grand)) + ' RINGGIT ONLY') : '—';
+      qGrand.textContent = fmtRM(totals.grand);
+      document.getElementById('qDiscount').textContent = '0.00';
+
+      // Staff name from PIC inputs (fallback to default)
+      document.getElementById('qStaff').textContent =
+        (picName && picRole) ? `${picName.toUpperCase()} (${picRole.toUpperCase()})`
+                             : 'ANIS SOLEHAH (PEGAWAI WEBSITE)';
+
+      quotationSection.classList.remove('hidden');
+      quotationSection.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function toWordsEN(num){
+      const a=["","ONE","TWO","THREE","FOUR","FIVE","SIX","SEVEN","EIGHT","NINE","TEN","ELEVEN","TWELVE","THIRTEEN","FOURTEEN","FIFTEEN","SIXTEEN","SEVENTEEN","EIGHTEEN","NINETEEN"];
+      const b=["","","TWENTY","THIRTY","FORTY","FIFTY","SIXTY","SEVENTY","EIGHTY","NINETY"];
+      const g=[""," THOUSAND"," MILLION"," BILLION"];
+      if(num===0) return "ZERO";
+      let words="", i=0;
+      while(num>0){
+        let chunk = num%1000;
+        if(chunk){
+          let str="";
+          if(chunk>99){ str+=a[Math.floor(chunk/100)]+" HUNDRED "; chunk%=100; }
+          if(chunk>19){ str+=b[Math.floor(chunk/10)]+" "; chunk%=10; }
+          if(chunk>0){ str+=a[chunk]+" "; }
+          words = str.trim()+g[i]+" "+words;
+        }
+        num=Math.floor(num/1000); i++;
+      }
+      return words.trim();
+    }
+
+    // Default mode
+    modeReady.checked = true; toggleSections();
+  </script>
+
+  <style>
+    .invoice-table { border-collapse: collapse; width: 100%; }
+    .invoice-table th, .invoice-table td { border-top: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb; padding: 8px 10px; }
+    .invoice-table thead th { background:#f3f4f6; text-align:left; }
+
+    /* Cetak hanya seksyen INVOICE */
+    @media print {
+      body * { visibility: hidden !important; }
+      #quotationSection, #quotationSection * { visibility: visible !important; }
+      #quotationSection { position: absolute; left:0; top:0; width:100%; box-shadow:none !important; border-radius:0 !important; }
+      .no-print { display:none !important; }
+    }
+  </style>
+</body>
+</html>
