@@ -9,7 +9,7 @@
 <body class="bg-gray-50 text-gray-900">
   <main class="max-w-6xl mx-auto px-4 py-8">
     <section class="bg-white shadow-sm rounded-2xl p-6">
-      <h2 class="text-lg font-semibold mb-4">CUSTOMER INFORMATION</h2>
+      <h2 class="text-lg font-semibold mb-4"># CUSTOMER INFORMATION</h2>
       <form id="rfqForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="md:col-span-2">
           <label for="fullName" class="block text-sm font-medium">Masukkan Full Name</label>
@@ -103,7 +103,7 @@
                 </div>
                 <div class="text-sm text-gray-700 space-y-1">
                   <p class="flex justify-between"><span>Subtotal (Cash)</span> <span id="bdSubtotal" class="font-medium">RM0.00</span></p>
-                  <p class="flex justify-between"><span>Caj E‑Perolehan (15%)</span> <span id="bdFee" class="font-medium">RM0.00</span></p>
+                  <p class="flex justify-between"><span>Caj E-Perolehan (15%)</span> <span id="bdFee" class="font-medium">RM0.00</span></p>
                   <p class="flex justify-between text-lg"><span class="font-semibold">Grand Total</span> <span id="bdGrand" class="font-semibold">RM0.00</span></p>
                 </div>
               </div>
@@ -206,7 +206,7 @@
               </div>
               <div class="text-sm text-gray-700 space-y-1">
                 <p class="flex justify-between"><span>Subtotal (Cash)</span> <span id="cbdSubtotal" class="font-medium">RM0.00</span></p>
-                <p class="flex justify-between"><span>Caj E‑Perolehan (15%)</span> <span id="cbdFee" class="font-medium">RM0.00</span></p>
+                <p class="flex justify-between"><span>Caj E-Perolehan (15%)</span> <span id="cbdFee" class="font-medium">RM0.00</span></p>
                 <p class="flex justify-between text-lg"><span class="font-semibold">Grand Total</span> <span id="cbdGrand" class="font-semibold">RM0.00</span></p>
               </div>
             </div>
@@ -224,7 +224,7 @@
         <p class="text-sm">LOT 4153, KAWASAN PERINDUSTRIAN CHENDERING, 21080 KUALA TERENGGANU, TERENGGANU DARUL IMAN, MALAYSIA.</p>
       </div>
 
-      <h2 class="text-xl font-bold text-center my-3">QUOTATION</h2>
+      <h2 class="text-xl font-bold text-center my-3">INVOICE</h2>
 
       <div class="grid md:grid-cols-2 gap-4 text-sm mb-2">
         <div class="border p-3 rounded">
@@ -279,7 +279,6 @@
         <p>BANK HOLDER: <span>NOOR ARFA ONLINE EMPIRE SDN BHD</span></p>
       </div>
 
-      <!-- Tandatangan: Customer kiri, Staf kanan -->
       <div class="mt-3 grid md:grid-cols-2 gap-6">
         <div class="border rounded p-3">
           <div class="h-20"></div>
@@ -298,14 +297,23 @@
 
       <div class="text-right text-xs text-gray-500 mt-2">Page 1 of 1</div>
 
-      <div class="mt-4 no-print">
+      <div class="mt-4 no-print flex gap-3">
         <button onclick="window.print()" class="px-4 py-2 rounded-xl bg-purple-700 text-white">Print / Save PDF</button>
+        <button id="btnSubmitOrder" class="px-4 py-2 rounded-xl bg-green-600 text-white" disabled>SUBMIT ORDER</button>
       </div>
     </section>
   </main>
 
   <script>
-    // ===== DATA READY =====
+    /* =========================================================
+       0) CONFIG: Web App URL (Google Apps Script)
+       ========================================================= */
+    const SHEETS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyNI2yAu9SYE3JHFSXxbXIXxiAx_tqoN8bQ2BwBqX2HyR5oCNm-N5u6VS_om8sFKrD_Tg/exec"; // <-- GANTI DENGAN URL ANDA
+    const DEFAULT_SHIPPING_METHOD = "Courier";
+
+    /* =========================================================
+       1) READY PRODUCT LIST + HARGA
+       ========================================================= */
     const READY_PRODUCTS = [
       { name:"BATIK AYUNI (DUBAI CREPE)", colors:["Grey","Green","Pink","Royal Blue","Brick Red"], pricing:q=>(q>=10?90:q>=5?109:119) },
       { name:"BATIK NURA (DUBAI CREPE)", colors:["Grey","Lavender","Pink","Olive Green","Royal Blue"], pricing:q=>(q>=10?90:q>=5?109:119) },
@@ -324,7 +332,57 @@
     ];
     const E_PEROLEHAN_RATE = 0.15;
 
-    // ===== DOM =====
+    /* =========================================================
+       2) READY SKU MAP (EDIT MENGIKUT SKU SEBENAR ANDA)
+       ========================================================= */
+    const READY_SKU_MAP = {
+      "BATIK AYUNI (DUBAI CREPE)": {
+        "Grey":"ZA3763","Green":"AYUNI-GREEN","Pink":"AYUNI-PINK","Royal Blue":"AYUNI-RBLUE","Brick Red":"AYUNI-BRED"
+      },
+      "BATIK NURA (DUBAI CREPE)": {
+        "Grey":"NURA-GREY","Lavender":"NURA-LAVENDER","Pink":"NURA-PINK","Olive Green":"NURA-OLIVE","Royal Blue":"NURA-RBLUE"
+      },
+      "BATIK AFIYA (DUBAI CREPE)": {
+        "Grey":"AFIYA-GREY","Burgundy":"AFIYA-BURG","Plum":"AFIYA-PLUM","Olive Green":"AFIYA-OLIVE","Navy Blue":"AFIYA-NAVY"
+      },
+      "BATIK MARSYA (DUBAI CREPE)": {
+        "Moss Green":"MARSYA-MOSS","Red":"MARSYA-RED","Violet Purple":"MARSYA-VIOLET","Royal Blue":"MARSYA-RBLUE","Grey":"MARSYA-GREY"
+      },
+      "KAIN PASANG NONEE (ROYAL SATIN)": {
+        "Emerald Green":"NONEE-EMERALD","Royal Blue":"NONEE-RBLUE"
+      },
+      "KAIN PASANG NURISHA (ROYAL SATIN)": {
+        "Black":"NURISHA-BLACK"
+      },
+      "KAIN PASANG MICRO COTTON - 4M BIDANG 60": {
+        "Royal Blue":"MC60-RBLUE"
+      },
+      "KAIN PASANG MARIA POLY COTTON - 4M BIDANG 59": {
+        "Black":"MARIA59-BLACK"
+      },
+      "KAIN PASANG PERSIAN CREPE - 4M BIDANG 60": {
+        "Chili Red":"PERSIAN60-CHILI"
+      },
+      "KAIN PASANG PARIS CREPE BATIK SARA - 4M BIDANG 60": {
+        "Maroon":"SARA60-MAROON","Black":"SARA60-BLACK"
+      },
+      "KAIN PASANG HANIFARA (TWILLY VELVET) - 4M BIDANG 55": {
+        "Light Pink":"HANIFARA55-LPINK","Matcha":"HANIFARA55-MATCHA","Light Peach":"HANIFARA55-LPEACH","Soft Grey":"HANIFARA55-SGREY","Sky Blue":"HANIFARA55-SKY","Yellow":"HANIFARA55-YELLOW","Butter Yellow":"HANIFARA55-BYELLOW","Peach Pink":"HANIFARA55-PEACHP","Lilac":"HANIFARA55-LILAC","Orange":"HANIFARA55-ORANGE"
+      },
+      "KAIN PASANG AIRA/ALYA/DHIA (ITALIAN CREPE) - 4M BIDANG 60": {
+        "Maroon":"AAD60-MAROON","Purple":"AAD60-PURPLE","Blue":"AAD60-BLUE","Black":"AAD60-BLACK","Greenish Yellow":"AAD60-GYELLOW","Deep Blue":"AAD60-DBLUE","Green":"AAD60-GREEN","Mustard":"AAD60-MUSTARD"
+      },
+      "KAIN PASANG SWISS SATIN - 4M BIDANG 60": {
+        "Royal Blue":"SWISS60-RBLUE","Maroon":"SWISS60-MAROON","Emerald Green":"SWISS60-EMERALD","Black":"SWISS60-BLACK","Soft Brown":"SWISS60-SBROWN"
+      },
+      "KAIN PASANG LILY (FRENCH CREPE) - 4M BIDANG 60": {
+        "Black":"LILY60-BLACK","Maroon":"LILY60-MAROON","Olive Green":"LILY60-OLIVE","Purple Violet":"LILY60-PVIOLET","Rose Pink":"LILY60-RPINK"
+      }
+    };
+
+    /* =========================================================
+       3) DOM REFS
+       ========================================================= */
     const modeReady = document.getElementById('modeReady');
     const modeCustom = document.getElementById('modeCustom');
     const readySection = document.getElementById('readySection');
@@ -352,7 +410,12 @@
     const qInWords = document.getElementById('qInWords');
     const qGrand = document.getElementById('qGrand');
 
+    const btnSubmitOrder = document.getElementById('btnSubmitOrder');
+
     const fmtRM = n => 'RM' + Number(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+    let LAST_ORDER_PAYLOAD = null;
+    let customItems = [];
 
     function toggleSections() {
       const mode = document.querySelector('input[name="productMode"]:checked')?.value;
@@ -362,7 +425,9 @@
     modeReady.addEventListener('change', toggleSections);
     modeCustom.addEventListener('change', toggleSections);
 
-    // ===== READY: bina kad produk =====
+    /* =========================================================
+       4) READY: UI & SELECTIONS
+       ========================================================= */
     function priceHint(prod){
       const s1 = prod.pricing(1), s5 = prod.pricing(5), s10 = prod.pricing(10);
       if (s1 !== s5 || s5 !== s10) return `Harga: 1–4 ${fmtRM(s1)} | 5–9 ${fmtRM(s5)} | ≥10 ${fmtRM(s10)}`;
@@ -394,6 +459,9 @@
       renderProducts(filtered);
     });
 
+    function currentPayment() {
+      return document.querySelector('input[name="paymentMethodReady"]:checked')?.value || null;
+    }
     function collectSelections() {
       const cards = [...readyList.querySelectorAll('[data-index]')];
       const items = [];
@@ -405,12 +473,12 @@
         if (qtyVal > 0) {
           const unit = prod.pricing(qtyVal);
           const amount = unit * qtyVal;
-          items.push({ name: prod.name, color, qty: qtyVal, unit, amount });
+          const sku = (READY_SKU_MAP[prod.name] && READY_SKU_MAP[prod.name][color]) || makeFallbackSKU(prod.name, color);
+          items.push({ name: prod.name, color, qty: qtyVal, unit, amount, sku });
         }
       });
       return items;
     }
-    const currentPayment = () => document.querySelector('input[name="paymentMethodReady"]:checked')?.value || null;
     function computeTotals(items, payment) {
       const subtotal = items.reduce((s,i)=> s + i.amount, 0);
       const fee = payment === 'E-Perolehan' ? subtotal * E_PEROLEHAN_RATE : 0;
@@ -433,6 +501,7 @@
       breakdownWrap.classList.toggle('hidden', items.length === 0);
       btnRFQ.disabled = items.length === 0;
     }
+
     btnTotal.addEventListener('click', () => {
       const pay = currentPayment();
       const items = collectSelections();
@@ -441,7 +510,9 @@
       if (items.length) breakdownWrap.scrollIntoView({ behavior: 'smooth' });
     });
 
-    // ===== CUSTOM LOGIC =====
+    /* =========================================================
+       5) CUSTOM LOGIC
+       ========================================================= */
     const VARIANT_PRICE = { new:500, edit:150, recolor:50, logo:100 };
     const btnAddCustom = document.getElementById('btnAddCustom');
     const btnTotalCustom = document.getElementById('btnTotalCustom');
@@ -461,9 +532,9 @@
     const c_code     = document.getElementById('c_code');
     const c_variant  = document.getElementById('c_variant');
 
-    let customItems = [];
-    const currentPaymentCustom = () => document.querySelector('input[name="paymentMethodCustom"]:checked')?.value || null;
-
+    function currentPaymentCustom() {
+      return document.querySelector('input[name="paymentMethodCustom"]:checked')?.value || null;
+    }
     function addCustomItem(){
       const qty = Number(c_qty.value || 0);
       const meter = Number(c_meter.value || 0);
@@ -472,9 +543,6 @@
         return;
       }
       const vp = VARIANT_PRICE[c_variant.value] || 0;
-
-      // FORMULA: caj design = harga variasi / qty
-      // total (Cash) = (caj design × qty) + harga variasi
       const designCharge = qty ? (vp / qty) : 0;
       const totalCash = (designCharge * qty) + vp;
 
@@ -484,7 +552,7 @@
         color: c_color.value,
         meter,
         qty,
-        code: c_code.value || '—',
+        code: c_code.value || '',
         variant: c_variant.value,
         variantText: c_variant.options[c_variant.selectedIndex].text,
         variantPrice: vp,
@@ -501,7 +569,7 @@
           <td class="px-3 py-2">${idx+1}</td>
           <td class="px-3 py-2">
             <div class="font-medium">${it.material} — ${it.pattern} (${it.color})</div>
-            <div class="text-xs text-gray-500">Meter: ${it.meter || 0} | Kod: ${it.code} | Variasi: ${it.variantText}</div>
+            <div class="text-xs text-gray-500">Meter: ${it.meter || 0} | Kod: ${it.code || '—'} | Variasi: ${it.variantText}</div>
           </td>
           <td class="px-3 py-2 text-right">${it.qty}</td>
           <td class="px-3 py-2 text-right">${fmtRM(it.variantPrice)}</td>
@@ -514,7 +582,6 @@
       customListWrap.classList.toggle('hidden', customItems.length===0);
       btnRFQCustom.disabled = customItems.length===0;
     }
-    // Delete via event delegation
     customListBody.addEventListener('click', (e)=>{
       const idx = e.target?.dataset?.del;
       if (idx !== undefined) {
@@ -522,7 +589,6 @@
         renderCustomList();
       }
     });
-
     function computeTotalsCustom(items, payment){
       const subtotal = items.reduce((s,i)=> s + i.totalCash, 0);
       const fee = payment === 'E-Perolehan' ? subtotal * E_PEROLEHAN_RATE : 0;
@@ -532,7 +598,7 @@
     btnAddCustom?.addEventListener('click', addCustomItem);
     btnTotalCustom?.addEventListener('click', () => {
       const pay = currentPaymentCustom();
-      if (!pay) { alert('Sila pilih Payment Method (Cash atau E‑Perolehan).'); return; }
+      if (!pay) { alert('Sila pilih Payment Method (Cash atau E-Perolehan).'); return; }
       const totals = computeTotalsCustom(customItems, pay);
       cbdPayment.textContent = pay;
       cbdSubtotal.textContent = fmtRM(totals.subtotal);
@@ -540,30 +606,10 @@
       cbdGrand.textContent = fmtRM(totals.grand);
       if (customItems.length) { customListWrap.classList.remove('hidden'); customListWrap.scrollIntoView({behavior:'smooth'}); }
     });
-    btnRFQCustom?.addEventListener('click', () => {
-      const pay = currentPaymentCustom();
-      if (!customItems.length) return;
-      const totals = computeTotalsCustom(customItems, pay);
-      const itemsForInvoice = customItems.map(ci => ({
-        name: `${ci.material} – ${ci.pattern} (${ci.color}) [${ci.variantText}]`,
-        color: '-',
-        qty: ci.qty,
-        unit: ci.designCharge,
-        amount: ci.totalCash
-      }));
-      populateQuotation(itemsForInvoice, totals, pay);
-    });
 
-    // ===== RFQ READY =====
-    btnRFQ.addEventListener('click', () => {
-      const pay = currentPayment();
-      const items = collectSelections();
-      if (!items.length) { alert('Sila masukkan quantity untuk sekurang-kurangnya satu produk.'); return; }
-      const totals = computeTotals(items, pay);
-      populateQuotation(items, totals, pay);
-    });
-
-    // ===== Quotation Populate =====
+    /* =========================================================
+       6) QUOTATION
+       ========================================================= */
     function populateQuotation(items, totals, payment) {
       const name = document.getElementById('fullName').value || '';
       const company = document.getElementById('company').value || '';
@@ -588,7 +634,7 @@
       qBody.innerHTML = items.map((it, idx)=>`
         <tr>
           <td>${idx+1}</td>
-          <td>—</td>
+          <td>${it.sku || '—'}</td>
           <td>${it.name}${it.color && it.color!=='-' ? ' ('+it.color+')':''}</td>
           <td class="text-right">${it.qty}</td>
           <td>UNIT</td>
@@ -600,7 +646,6 @@
       qGrand.textContent = fmtRM(totals.grand);
       document.getElementById('qDiscount').textContent = '0.00';
 
-      // Staff name from PIC inputs (fallback to default)
       document.getElementById('qStaff').textContent =
         (picName && picRole) ? `${picName.toUpperCase()} (${picRole.toUpperCase()})`
                              : 'ANIS SOLEHAH (PEGAWAI WEBSITE)';
@@ -608,7 +653,6 @@
       quotationSection.classList.remove('hidden');
       quotationSection.scrollIntoView({ behavior: 'smooth' });
     }
-
     function toWordsEN(num){
       const a=["","ONE","TWO","THREE","FOUR","FIVE","SIX","SEVEN","EIGHT","NINE","TEN","ELEVEN","TWELVE","THIRTEEN","FOURTEEN","FIFTEEN","SIXTEEN","SEVENTEEN","EIGHTEEN","NINETEEN"];
       const b=["","","TWENTY","THIRTY","FORTY","FIFTY","SIXTY","SEVENTY","EIGHTY","NINETY"];
@@ -629,7 +673,127 @@
       return words.trim();
     }
 
-    // Default mode
+    /* =========================================================
+       7) GOOGLE SHEETS SUBMISSION (Apps Script Web App)
+       ========================================================= */
+    async function sendToSheets(payload) {
+      try {
+        const res = await fetch(SHEETS_WEBAPP_URL, {
+          method: 'POST',
+          headers: {'Content-Type': 'text/plain'}, // elak preflight
+          body: JSON.stringify(payload)
+        });
+        let msg = 'Order dihantar ke Google Sheets.';
+        try {
+          const data = await res.json();
+          if (data?.ok && data?.orderId) msg = `Order dihantar! Order ID: ${data.orderId}`;
+        } catch(_) {}
+        alert(msg);
+      } catch (err) {
+        console.error(err);
+        alert('Maaf, gagal hantar ke Google Sheets. Cuba lagi.');
+      }
+    }
+
+    /* =========================================================
+       8) RFQ BUTTONS
+       ========================================================= */
+    function collectCustomerForPayload(){
+      const addr = (document.getElementById('address').value || '').split('\n');
+      return {
+        fullName: document.getElementById('fullName').value || '',
+        email: document.getElementById('email').value || '',
+        phone: document.getElementById('phone').value || '',
+        company: document.getElementById('company').value || '',
+        address_line1: addr[0] || '',
+        address_line2: addr[1] || '',
+        address_line3: addr.length>2 ? addr.slice(2).join(' ') : ''
+        // city/state/postcode/country boleh ditambah jika ada input berasingan
+      };
+    }
+
+    // READY → RFQ (jana quotation + simpan payload)
+    btnRFQ.addEventListener('click', () => {
+      const pay = currentPayment();
+      const items = collectSelections();
+      if (!items.length) { alert('Sila masukkan quantity untuk sekurang-kurangnya satu produk.'); return; }
+      const totals = computeTotals(items, pay);
+
+      const itemsForInvoice = items.map(i => ({
+        name: i.name, color: i.color, qty: i.qty, unit: i.unit, amount: i.amount, sku: i.sku
+      }));
+
+      const customer = collectCustomerForPayload();
+      LAST_ORDER_PAYLOAD = {
+        source: "noorarfa-rfq",
+        mode: "ready",
+        payment_method: pay || "Cash",
+        shipping_method: DEFAULT_SHIPPING_METHOD,
+        items: items.map(i => ({
+          sku: i.sku || '',
+          name: i.name + (i.color ? ` (${i.color})` : ''),
+          qty: i.qty,
+          unit_price: i.unit,
+          amount: i.amount
+        })),
+        totals,
+        customer
+      };
+
+      populateQuotation(itemsForInvoice, totals, pay);
+      btnSubmitOrder.disabled = false;
+    });
+
+    // CUSTOM → RFQ (jana quotation + simpan payload)
+    btnRFQCustom?.addEventListener('click', () => {
+      const pay = currentPaymentCustom();
+      if (!customItems.length) { alert('Sila tambah sekurang-kurangnya satu item custom.'); return; }
+
+      const totals = computeTotalsCustom(customItems, pay);
+
+      const itemsForInvoice = customItems.map(ci => ({
+        name: `${ci.material} – ${ci.pattern} (${ci.color}) [${ci.variantText}]`,
+        color: '-', qty: ci.qty, unit: ci.designCharge, amount: ci.totalCash, sku: ci.code || ''
+      }));
+
+      const customer = collectCustomerForPayload();
+      LAST_ORDER_PAYLOAD = {
+        source: "noorarfa-rfq",
+        mode: "custom",
+        payment_method: pay || "Cash",
+        shipping_method: DEFAULT_SHIPPING_METHOD,
+        items: customItems.map(ci => ({
+          sku: ci.code || '',
+          name: `${ci.material} – ${ci.pattern} (${ci.color}) [${ci.variantText}]`,
+          qty: ci.qty,
+          unit_price: ci.designCharge,
+          amount: ci.totalCash
+        })),
+        totals,
+        customer
+      };
+
+      populateQuotation(itemsForInvoice, totals, pay);
+      btnSubmitOrder.disabled = false;
+    });
+
+    // SUBMIT ORDER → hantar ke Google Sheets
+    btnSubmitOrder.addEventListener('click', async () => {
+      if (!LAST_ORDER_PAYLOAD) { alert('Sila jana quotation dahulu.'); return; }
+      const ok = confirm('Hantar order ini ke Noor Arfa (Google Sheets)?');
+      if (!ok) return;
+      await sendToSheets(LAST_ORDER_PAYLOAD);
+      // Optional: btnSubmitOrder.disabled = true;
+    });
+
+    // Fallback SKU generator (jika mapping tiada) — elakkan kosong
+    function makeFallbackSKU(productName, color){
+      const p = (productName||'').replace(/[^A-Z0-9]+/gi,' ').trim().split(/\s+/).map(w=>w[0]).join('').toUpperCase();
+      const c = (color||'').replace(/\s+/g,'').replace(/[^A-Za-z0-9]/g,'').toUpperCase();
+      return (p? p : 'SKU') + '-' + (c? c : 'NA');
+    }
+
+    // Default tab
     modeReady.checked = true; toggleSections();
   </script>
 
@@ -637,8 +801,6 @@
     .invoice-table { border-collapse: collapse; width: 100%; }
     .invoice-table th, .invoice-table td { border-top: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb; padding: 8px 10px; }
     .invoice-table thead th { background:#f3f4f6; text-align:left; }
-
-    /* Cetak hanya seksyen INVOICE */
     @media print {
       body * { visibility: hidden !important; }
       #quotationSection, #quotationSection * { visibility: visible !important; }
@@ -648,7 +810,3 @@
   </style>
 </body>
 </html>
-
-
-
-
