@@ -78,7 +78,7 @@
             <input id="readySearch" type="text" placeholder="Cari produk..." class="rounded-xl border-gray-300 px-3 py-2" />
           </div>
 
-          <!-- GRID PRODUK (setiap kad kini ada pilih kos jahit + Tambah Item) -->
+          <!-- GRID PRODUK -->
           <div id="readyList" class="grid sm:grid-cols-2 lg:grid-cols-2 gap-4 mt-4 max-h-[520px] overflow-auto pr-1"></div>
 
           <!-- SENARAI READY DITAMBAH -->
@@ -152,20 +152,30 @@
               <label class="block text-sm font-medium">Quantity</label>
               <input id="c_qty" type="number" min="1" placeholder="cth 10" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2" />
             </div>
-            <div>
-              <label class="block text-sm font-medium">Kod Produk</label>
-              <input id="c_code" type="text" placeholder="cth ZJ0001" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2" />
-            </div>
 
-            <div class="md:col-span-3">
+            <!-- BUANG Kod Produk, GANTI Add-on & Kos Jahit -->
+            <div>
               <label class="block text-sm font-medium">Variasi Design</label>
               <select id="c_variant" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2">
                 <option value="new">New Design (RM500)</option>
                 <option value="edit">Edit Design (RM150)</option>
                 <option value="recolor">Tukar Warna (RM50)</option>
-                <option value="logo">Tambah Logo/Nama Sendiri (RM100)</option>
               </select>
               <p class="text-xs text-gray-500 mt-1">Formula: caj design = harga variasi / qty; total (Cash) = (caj design × qty) + harga variasi.</p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium">Add-on</label>
+              <label class="inline-flex items-center gap-2 mt-1">
+                <input type="checkbox" id="c_addon_logo" />
+                <span>Tambah logo/nama sendiri (RM100)</span>
+              </label>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium">Kos Jahit (kod)</label>
+              <input id="c_sewcode" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2" list="sewOptions" placeholder="cth JHT-001" />
+              <div id="c_sewdesc" class="text-xs text-gray-500 mt-1">—</div>
             </div>
           </div>
 
@@ -198,8 +208,9 @@
                     <th class="text-left px-3 py-2">#</th>
                     <th class="text-left px-3 py-2">Butiran</th>
                     <th class="text-right px-3 py-2">Qty</th>
-                    <th class="text-right px-3 py-2">Harga Variasi</th>
-                    <th class="text-right px-3 py-2">Caj Design</th>
+                    <th class="text-right px-3 py-2">Harga Variasi (incl. add-on)</th>
+                    <th class="text-right px-3 py-2">Caj Design/Unit</th>
+                    <th class="text-right px-3 py-2">Kos Jahit/Unit</th>
                     <th class="text-right px-3 py-2">Jumlah (Cash)</th>
                     <th class="px-3 py-2"></th>
                   </tr>
@@ -223,7 +234,7 @@
       </form>
     </section>
 
-    <!-- QUOTATION (format contoh penuh) -->
+    <!-- QUOTATION -->
     <section id="quotationSection" class="bg-white shadow-sm rounded-2xl p-6 mt-8 hidden print:block">
       <div class="text-center mb-2">
         <img src="logo-noorarfa.jpg" alt="Noor Arfa" class="mx-auto h-10 mb-2">
@@ -312,7 +323,7 @@
     </section>
   </main>
 
-  <!-- DATASENARAI KOS JAHIT (untuk search ikut KOD) -->
+  <!-- DATALIST KOS JAHIT untuk search kod -->
   <datalist id="sewOptions"></datalist>
 
   <script>
@@ -351,41 +362,24 @@
       "BATIK MARSYA (DUBAI CREPE)": {
         "Moss Green":"MARSYA-MOSS","Red":"MARSYA-RED","Violet Purple":"MARSYA-VIOLET","Royal Blue":"MARSYA-RBLUE","Grey":"MARSYA-GREY"
       },
-      "KAIN PASANG NONEE (ROYAL SATIN)": {
-        "Emerald Green":"NONEE-EMERALD","Royal Blue":"NONEE-RBLUE"
-      },
-      "KAIN PASANG NURISHA (ROYAL SATIN)": {
-        "Black":"NURISHA-BLACK"
-      },
-      "KAIN PASANG MICRO COTTON - 4M BIDANG 60": {
-        "Royal Blue":"MC60-RBLUE"
-      },
-      "KAIN PASANG MARIA POLY COTTON - 4M BIDANG 59": {
-        "Black":"MARIA59-BLACK"
-      },
-      "KAIN PASANG PERSIAN CREPE - 4M BIDANG 60": {
-        "Chili Red":"PERSIAN60-CHILI"
-      },
-      "KAIN PASANG PARIS CREPE BATIK SARA - 4M BIDANG 60": {
-        "Maroon":"SARA60-MAROON","Black":"SARA60-BLACK"
-      },
+      "KAIN PASANG NONEE (ROYAL SATIN)": {"Emerald Green":"NONEE-EMERALD","Royal Blue":"NONEE-RBLUE"},
+      "KAIN PASANG NURISHA (ROYAL SATIN)": {"Black":"NURISHA-BLACK"},
+      "KAIN PASANG MICRO COTTON - 4M BIDANG 60": {"Royal Blue":"MC60-RBLUE"},
+      "KAIN PASANG MARIA POLY COTTON - 4M BIDANG 59": {"Black":"MARIA59-BLACK"},
+      "KAIN PASANG PERSIAN CREPE - 4M BIDANG 60": {"Chili Red":"PERSIAN60-CHILI"},
+      "KAIN PASANG PARIS CREPE BATIK SARA - 4M BIDANG 60": {"Maroon":"SARA60-MAROON","Black":"SARA60-BLACK"},
       "KAIN PASANG HANIFARA (TWILLY VELVET) - 4M BIDANG 55": {
         "Light Pink":"HANIFARA55-LPINK","Matcha":"HANIFARA55-MATCHA","Light Peach":"HANIFARA55-LPEACH","Soft Grey":"HANIFARA55-SGREY","Sky Blue":"HANIFARA55-SKY","Yellow":"HANIFARA55-YELLOW","Butter Yellow":"HANIFARA55-BYELLOW","Peach Pink":"HANIFARA55-PEACHP","Lilac":"HANIFARA55-LILAC","Orange":"HANIFARA55-ORANGE"
       },
       "KAIN PASANG AIRA/ALYA/DHIA (ITALIAN CREPE) - 4M BIDANG 60": {
         "Maroon":"AAD60-MAROON","Purple":"AAD60-PURPLE","Blue":"AAD60-BLUE","Black":"AAD60-BLACK","Greenish Yellow":"AAD60-GYELLOW","Deep Blue":"AAD60-DBLUE","Green":"AAD60-GREEN","Mustard":"AAD60-MUSTARD"
       },
-      "KAIN PASANG SWISS SATIN - 4M BIDANG 60": {
-        "Royal Blue":"SWISS60-RBLUE","Maroon":"SWISS60-MAROON","Emerald Green":"SWISS60-EMERALD","Black":"SWISS60-BLACK","Soft Brown":"SWISS60-SBROWN"
-      },
-      "KAIN PASANG LILY (FRENCH CREPE) - 4M BIDANG 60": {
-        "Black":"LILY60-BLACK","Maroon":"LILY60-MAROON","Olive Green":"LILY60-OLIVE","Purple Violet":"LILY60-PVIOLET","Rose Pink":"LILY60-RPINK"
-      }
+      "KAIN PASANG SWISS SATIN - 4M BIDANG 60": {"Royal Blue":"SWISS60-RBLUE","Maroon":"SWISS60-MAROON","Emerald Green":"SWISS60-EMERALD","Black":"SWISS60-BLACK","Soft Brown":"SWISS60-SBROWN"},
+      "KAIN PASANG LILY (FRENCH CREPE) - 4M BIDANG 60": {"Black":"LILY60-BLACK","Maroon":"LILY60-MAROON","Olive Green":"LILY60-OLIVE","Purple Violet":"LILY60-PVIOLET","Rose Pink":"LILY60-RPINK"}
     };
 
-    /* === KOS JAHIT (GANTI DENGAN SENARAI SEBENAR ANDA) === */
+    /* === KOS JAHIT (contoh; ganti ikut data sebenar) === */
     const SEWING_OPTIONS = [
-      // code, name, price (per unit)
       { code: "JHT-000", name: "Hemming Basic / Jahit Tepi", price: 8 },
       { code: "JHT-001", name: "Baju Kurung", price: 35 },
       { code: "JHT-002", name: "Kebaya", price: 45 },
@@ -394,10 +388,10 @@
       { code: "JHT-005", name: "Seluar / Slack", price: 25 },
       { code: "JHT-006", name: "Baju Melayu (Dewasa)", price: 60 },
       { code: "JHT-007", name: "Baju Melayu (Kanak-kanak)", price: 40 },
-      // … tambah lagi di sini ikut template anda
+      // … tambah lagi di sini
     ];
 
-    /* =================== DOM =================== */
+    /* =================== DOM REFS =================== */
     const modeReady = document.getElementById('modeReady');
     const modeCustom = document.getElementById('modeCustom');
     const readySection = document.getElementById('readySection');
@@ -431,18 +425,16 @@
 
     const fmtRM = n => 'RM' + Number(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-    let readyItems = []; // <-- item READY ditambah satu-persatu
+    let LAST_ORDER_PAYLOAD = null;
+    let readyItems = [];
     let customItems = [];
 
+    /* =================== HELPERS =================== */
     function toggleSections() {
       const mode = document.querySelector('input[name="productMode"]:checked')?.value;
       readySection.classList.toggle('hidden', mode !== 'ready');
       customSection.classList.toggle('hidden', mode !== 'custom');
     }
-    modeReady.addEventListener('change', toggleSections);
-    modeCustom.addEventListener('change', toggleSections);
-
-    /* =================== HELPERS =================== */
     function priceHint(prod){
       const s1 = prod.pricing(1), s5 = prod.pricing(5), s10 = prod.pricing(10);
       if (s1 !== s5 || s5 !== s10) return `Harga kain: 1–4 ${fmtRM(s1)} | 5–9 ${fmtRM(s5)} | ≥10 ${fmtRM(s10)}`;
@@ -464,6 +456,7 @@
         .sort((a,b)=>a.code.localeCompare(b.code))
         .map(o => `<option value="${o.code}">${o.name} — RM${o.price}</option>`).join('');
     }
+    populateSewingDatalist();
 
     /* =================== READY: UI =================== */
     function buildProductCard(prod, index) {
@@ -501,20 +494,14 @@
     function renderProducts(list = READY_PRODUCTS) {
       readyList.innerHTML = list.map((p,i)=>buildProductCard(p,i).outerHTML).join('');
     }
-    function currentPaymentReady() {
-      return document.querySelector('input[name="paymentMethodReady"]:checked')?.value || null;
-    }
-
-    // Inisialisasi
-    populateSewingDatalist();
     renderProducts();
+
     readySearch?.addEventListener('input', () => {
       const q = readySearch.value.toLowerCase();
       const filtered = READY_PRODUCTS.filter(p => p.name.toLowerCase().includes(q));
       renderProducts(filtered);
     });
 
-    // Event delegation untuk kad READY
     readyList.addEventListener('input', (e)=>{
       if (e.target.classList.contains('inp-sew')) {
         const code = e.target.value;
@@ -524,6 +511,10 @@
         desc.textContent = found ? `${found.name} (${found.code}) — ${fmtRM(found.price)}` : '—';
       }
     });
+
+    function currentPaymentReady() {
+      return document.querySelector('input[name="paymentMethodReady"]:checked')?.value || null;
+    }
 
     readyList.addEventListener('click', (e)=>{
       if (!e.target.classList.contains('btn-add-ready')) return;
@@ -557,7 +548,6 @@
         amount: total
       });
 
-      // reset qty + sewing input (optional)
       card.querySelector('.inp-qty').value = '';
       card.querySelector('.inp-sew').value = '';
       card.querySelector('.sew-desc').textContent = '—';
@@ -616,8 +606,8 @@
       breakdownWrap.scrollIntoView({ behavior: 'smooth' });
     });
 
-    /* =================== CUSTOM (sedia ada) =================== */
-    const VARIANT_PRICE = { new:500, edit:150, recolor:50, logo:100 };
+    /* =================== CUSTOM =================== */
+    const VARIANT_PRICE = { new:500, edit:150, recolor:50 }; // logo dibuang
     const btnAddCustom = document.getElementById('btnAddCustom');
     const btnTotalCustom = document.getElementById('btnTotalCustom');
     const btnRFQCustom = document.getElementById('btnRFQCustom');
@@ -633,12 +623,20 @@
     const c_color    = document.getElementById('c_color');
     const c_meter    = document.getElementById('c_meter');
     const c_qty      = document.getElementById('c_qty');
-    const c_code     = document.getElementById('c_code');
     const c_variant  = document.getElementById('c_variant');
+    const c_addon_logo = document.getElementById('c_addon_logo');
+    const c_sewcode    = document.getElementById('c_sewcode');
+    const c_sewdesc    = document.getElementById('c_sewdesc');
 
     function currentPaymentCustom() {
       return document.querySelector('input[name="paymentMethodCustom"]:checked')?.value || null;
     }
+
+    c_sewcode.addEventListener('input', ()=>{
+      const sew = findSewingByCode(c_sewcode.value);
+      c_sewdesc.textContent = sew ? `${sew.name} (${sew.code}) — ${fmtRM(sew.price)}` : '—';
+    });
+
     function addCustomItem(){
       const qty = Number(c_qty.value || 0);
       const meter = Number(c_meter.value || 0);
@@ -646,9 +644,18 @@
         alert('Sila lengkapkan Material, Corak, Warna dan Quantity (>0).');
         return;
       }
-      const vp = VARIANT_PRICE[c_variant.value] || 0;
-      const designCharge = qty ? (vp / qty) : 0;
-      const totalCash = (designCharge * qty) + vp;
+      const baseVar = VARIANT_PRICE[c_variant.value] || 0;
+      const addon   = c_addon_logo.checked ? 100 : 0;
+      const variationTotal = baseVar + addon;
+
+      const sewObj = findSewingByCode(c_sewcode.value);
+      const sewPrice = sewObj ? Number(sewObj.price) : 0;
+      const sewCode  = sewObj ? sewObj.code : '';
+      const sewName  = sewObj ? sewObj.name : '';
+
+      const designCharge = qty ? (variationTotal / qty) : 0;           // per unit
+      const unitPrice    = designCharge + sewPrice;                    // per unit
+      const totalCash    = (designCharge * qty) + variationTotal + (sewPrice * qty); // ikut formula existing + kos jahit
 
       customItems.push({
         material: c_material.value,
@@ -656,28 +663,38 @@
         color: c_color.value,
         meter,
         qty,
-        code: c_code.value || '',
         variant: c_variant.value,
-        variantText: c_variant.options[c_variant.selectedIndex].text,
-        variantPrice: vp,
+        variantText: c_variant.options[c_variant.selectedIndex].text + (addon ? " + Add-on Logo" : ""),
+        baseVariantPrice: baseVar,
+        addonLogo: addon,
+        variationTotal,
         designCharge,
+        sewCode,
+        sewName,
+        sewPrice,
+        unitPrice,
         totalCash
       });
 
-      c_meter.value = ''; c_qty.value = ''; c_code.value = '';
+      // reset input penting
+      c_meter.value = ''; c_qty.value = ''; c_sewcode.value = ''; c_sewdesc.textContent = '—'; c_addon_logo.checked = false;
       renderCustomList();
     }
+
     function renderCustomList(){
       customListBody.innerHTML = customItems.map((it,idx)=>`
         <tr>
           <td class="px-3 py-2">${idx+1}</td>
           <td class="px-3 py-2">
             <div class="font-medium">${it.material} — ${it.pattern} (${it.color})</div>
-            <div class="text-xs text-gray-500">Meter: ${it.meter || 0} | Kod: ${it.code || '—'} | Variasi: ${it.variantText}</div>
+            <div class="text-xs text-gray-500">
+              Meter: ${it.meter || 0} | Variasi: ${it.variantText} | Sew: ${it.sewCode || '—'}
+            </div>
           </td>
           <td class="px-3 py-2 text-right">${it.qty}</td>
-          <td class="px-3 py-2 text-right">${fmtRM(it.variantPrice)}</td>
+          <td class="px-3 py-2 text-right">${fmtRM(it.variationTotal)}</td>
           <td class="px-3 py-2 text-right">${fmtRM(it.designCharge)}</td>
+          <td class="px-3 py-2 text-right">${fmtRM(it.sewPrice)}</td>
           <td class="px-3 py-2 text-right">${fmtRM(it.totalCash)}</td>
           <td class="px-3 py-2 text-right">
             <button class="text-red-600 underline" data-del="${idx}">Delete</button>
@@ -693,13 +710,16 @@
         renderCustomList();
       }
     });
+
     function computeTotalsCustom(items, payment){
       const subtotal = items.reduce((s,i)=> s + i.totalCash, 0);
       const fee = payment === 'E-Perolehan' ? subtotal * E_PEROLEHAN_RATE : 0;
       const grand = subtotal + fee;
       return {subtotal, fee, grand};
     }
+
     btnAddCustom?.addEventListener('click', addCustomItem);
+
     btnTotalCustom?.addEventListener('click', () => {
       const pay = currentPaymentCustom();
       if (!pay) { alert('Sila pilih Payment Method (Cash atau E-Perolehan).'); return; }
@@ -711,7 +731,7 @@
       if (customItems.length) { customListWrap.classList.remove('hidden'); customListWrap.scrollIntoView({behavior:'smooth'}); }
     });
 
-    /* =================== QUOTATION =================== */
+    /* =================== QUOTATION (kekal) =================== */
     function populateQuotation(items, totals, payment) {
       const name = document.getElementById('fullName').value || '';
       const company = document.getElementById('company').value || '';
@@ -800,111 +820,4 @@
       const addr = (document.getElementById('address').value || '').split('\n');
       return {
         fullName: document.getElementById('fullName').value || '',
-        email: document.getElementById('email').value || '',
-        phone: document.getElementById('phone').value || '',
-        company: document.getElementById('company').value || '',
-        address_line1: addr[0] || '',
-        address_line2: addr[1] || '',
-        address_line3: addr.length>2 ? addr.slice(2).join(' ') : ''
-      };
-    }
-
-    // READY → RFQ
-    btnRFQ.addEventListener('click', () => {
-      const pay = currentPaymentReady();
-      if (!readyItems.length) { alert('Sila tambah sekurang-kurangnya satu item (button "Tambah Item").'); return; }
-      const totals = computeTotalsFromReady(pay);
-
-      // Invoice lines: unit = unitFabric + sewPrice; desc tambah kod jahit jika ada
-      const itemsForInvoice = readyItems.map(i => ({
-        sku: i.sku,
-        desc: i.name + ' ('+i.color+')' + (i.sewCode ? ` [Sew ${i.sewCode}]` : ''),
-        qty: i.qty,
-        unit: i.unitFabric + (i.sewPrice||0),
-        amount: i.amount
-      }));
-
-      const customer = collectCustomerForPayload();
-      LAST_ORDER_PAYLOAD = {
-        source: "noorarfa-rfq",
-        mode: "ready",
-        payment_method: pay || "Cash",
-        shipping_method: DEFAULT_SHIPPING_METHOD,
-        items: readyItems.map(i => ({
-          sku: i.sku || '',
-          name: i.name + ' ('+i.color+')' + (i.sewCode ? ` [Sew ${i.sewCode}]` : ''),
-          qty: i.qty,
-          unit_price: i.unitFabric + (i.sewPrice||0),
-          amount: i.amount
-        })),
-        totals,
-        customer
-      };
-
-      populateQuotation(itemsForInvoice, totals, pay);
-      btnSubmitOrder.disabled = false;
-    });
-
-    // CUSTOM → RFQ
-    btnRFQCustom?.addEventListener('click', () => {
-      const pay = currentPaymentCustom();
-      if (!customItems.length) { alert('Sila tambah sekurang-kurangnya satu item custom.'); return; }
-
-      const totals = computeTotalsCustom(customItems, pay);
-
-      const itemsForInvoice = customItems.map(ci => ({
-        sku: ci.code || '',
-        desc: `${ci.material} – ${ci.pattern} (${ci.color}) [${ci.variantText}]`,
-        qty: ci.qty,
-        unit: ci.designCharge,
-        amount: ci.totalCash
-      }));
-
-      const customer = collectCustomerForPayload();
-      LAST_ORDER_PAYLOAD = {
-        source: "noorarfa-rfq",
-        mode: "custom",
-        payment_method: pay || "Cash",
-        shipping_method: DEFAULT_SHIPPING_METHOD,
-        items: customItems.map(ci => ({
-          sku: ci.code || '',
-          name: `${ci.material} – ${ci.pattern} (${ci.color}) [${ci.variantText}]`,
-          qty: ci.qty,
-          unit_price: ci.designCharge,
-          amount: ci.totalCash
-        })),
-        totals,
-        customer
-      };
-
-      populateQuotation(itemsForInvoice, totals, pay);
-      btnSubmitOrder.disabled = false;
-    });
-
-    // SUBMIT ORDER
-    let LAST_ORDER_PAYLOAD = null; // declared after usage above in original snippet; move to top if needed
-    btnSubmitOrder.addEventListener('click', async () => {
-      if (!LAST_ORDER_PAYLOAD) { alert('Sila jana quotation dahulu.'); return; }
-      const ok = confirm('Hantar order ini ke Noor Arfa (Google Sheets)?');
-      if (!ok) return;
-      await sendToSheets(LAST_ORDER_PAYLOAD);
-      // Optional: btnSubmitOrder.disabled = true;
-    });
-
-    // Default tab
-    modeReady.checked = true; toggleSections();
-  </script>
-
-  <style>
-    .invoice-table { border-collapse: collapse; width: 100%; }
-    .invoice-table th, .invoice-table td { border-top: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb; padding: 8px 10px; }
-    .invoice-table thead th { background:#f3f4f6; text-align:left; }
-    @media print {
-      body * { visibility: hidden !important; }
-      #quotationSection, #quotationSection * { visibility: visible !important; }
-      #quotationSection { position: absolute; left:0; top:0; width:100%; box-shadow:none !important; border-radius:0 !important; }
-      .no-print { display:none !important; }
-    }
-  </style>
-</body>
-</html>
+        email: document.getElementBy
