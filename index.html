@@ -450,7 +450,6 @@
     const c_pattern  = document.getElementById('c_pattern');
     const c_color    = document.getElementById('c_color');
     const c_meter    = document.getElementById('c_meter');
-    bigconst_c_qty_placeholder = 1;
     const c_qty      = document.getElementById('c_qty');
     const c_variant  = document.getElementById('c_variant');
     const c_addonLogo = document.getElementById('c_addonLogo');
@@ -466,6 +465,14 @@
     let customItems = [];
 
     function toggleSections() {
+// Aktifkan penukaran tab Ready/Custom
+modeReady?.addEventListener('change', toggleSections);
+modeCustom?.addEventListener('change', toggleSections);
+// (alternatif lebih robust)
+document.querySelectorAll('input[name="productMode"]').forEach(r =>
+  r.addEventListener('change', toggleSections)
+);
+
       const mode = document.querySelector('input[name="productMode"]:checked')?.value;
       readySection.classList.toggle('hidden', mode !== 'ready');
       customSection.classList.toggle('hidden', mode !== 'custom');
@@ -963,3 +970,4 @@
   </style>
 </body>
 </html>
+
