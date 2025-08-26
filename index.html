@@ -56,10 +56,7 @@
           </div>
         </div>
 
-        <!-- ========= DATALIST KOD JAHIT (GLOBAL) ========= -->
-        <datalist id="sewOptions"></datalist>
-
-        <!-- ===================== READY STOCK ===================== -->
+        <!-- READY STOCK -->
         <div id="readySection" class="md:col-span-2 hidden">
           <div class="mt-4">
             <label class="block text-sm font-medium mb-2">Payment Method</label>
@@ -75,55 +72,85 @@
             </div>
           </div>
 
-          <div class="mt-4">
+          <!-- READY: Produk kain -->
+          <div class="mt-6">
             <div class="flex items-center justify-between gap-3">
               <h3 class="font-semibold">Senarai Produk Ready Stock</h3>
               <input id="readySearch" type="text" placeholder="Cari produk..." class="rounded-xl border-gray-300 px-3 py-2" />
             </div>
+            <div id="readyList" class="grid sm:grid-cols-2 lg:grid-cols-2 gap-4 mt-4 max-h-[420px] overflow-auto pr-1"></div>
+          </div>
 
-            <div id="readyList" class="grid sm:grid-cols-2 lg:grid-cols-2 gap-4 mt-4 max-h-[520px] overflow-auto pr-1"></div>
+          <!-- READY: Kos Jahit -->
+          <div class="mt-8">
+            <div class="flex items-center justify-between gap-3">
+              <h3 class="font-semibold">Kos Jahit (Tambah Item)</h3>
+              <input id="sewSearchReady" type="text" placeholder="Cari kod/description (cth ZW1801)" class="rounded-xl border-gray-300 px-3 py-2" />
+            </div>
 
-            <!-- Senarai Ready Ditambah -->
-            <div id="readyAddedWrap" class="mt-6 hidden">
-              <h4 class="font-semibold mb-2">Senarai Ready Ditambah</h4>
-              <div class="overflow-auto border rounded-xl">
-                <table class="min-w-full text-sm">
-                  <thead class="bg-gray-100">
-                    <tr>
-                      <th class="px-3 py-2 text-left">Produk</th>
-                      <th class="px-3 py-2 text-left">Warna</th>
-                      <th class="px-3 py-2 text-left">Kod Jahit</th>
-                      <th class="px-3 py-2 text-right">Jahit/Unit</th>
-                      <th class="px-3 py-2 text-right">Kain/Unit</th>
-                      <th class="px-3 py-2 text-right">Qty</th>
-                      <th class="px-3 py-2 text-right">Jumlah</th>
-                      <th class="px-3 py-2"></th>
-                    </tr>
-                  </thead>
-                  <tbody id="readyAddedBody"></tbody>
-                </table>
+            <div class="mt-3 grid md:grid-cols-2 gap-3">
+              <div class="border rounded-xl p-3">
+                <div id="sewListReady" class="max-h-[260px] overflow-auto text-sm"></div>
               </div>
-
-              <div class="mt-4 grid sm:grid-cols-2 gap-4">
-                <div class="text-sm text-gray-600">
-                  <p><span class="font-medium">Payment:</span> <span id="bdPayment">—</span></p>
+              <div class="border rounded-xl p-3">
+                <h4 class="font-medium mb-2">Item Kos Jahit Ditambah</h4>
+                <div class="overflow-auto border rounded-xl">
+                  <table class="min-w-full text-sm">
+                    <thead class="bg-gray-100">
+                      <tr>
+                        <th class="text-left px-3 py-2">Kod</th>
+                        <th class="text-left px-3 py-2">Butiran</th>
+                        <th class="text-left px-3 py-2">Material</th>
+                        <th class="text-right px-3 py-2">Qty</th>
+                        <th class="text-right px-3 py-2">Harga/Unit</th>
+                        <th class="text-right px-3 py-2">Jumlah</th>
+                        <th class="px-3 py-2"></th>
+                      </tr>
+                    </thead>
+                    <tbody id="sewChosenBodyReady"></tbody>
+                  </table>
                 </div>
-                <div class="text-sm text-gray-700 space-y-1">
-                  <p class="flex justify-between"><span>Subtotal (Cash)</span> <span id="bdSubtotal" class="font-medium">RM0.00</span></p>
-                  <p class="flex justify-between"><span>Caj E-Perolehan (15%)</span> <span id="bdFee" class="font-medium">RM0.00</span></p>
-                  <p class="flex justify-between text-lg"><span class="font-semibold">Grand Total</span> <span id="bdGrand" class="font-semibold">RM0.00</span></p>
-                </div>
-              </div>
-
-              <div class="flex flex-wrap items-center gap-3 mt-4">
-                <button id="btnTotal" type="button" class="px-4 py-2 rounded-xl bg-purple-700 text-white">TOTAL</button>
-                <button id="btnRFQ" type="button" class="px-4 py-2 rounded-xl bg-gray-900 text-white" disabled>REQUEST FOR QUOTATION</button>
               </div>
             </div>
           </div>
+
+          <!-- READY: Breakdown & actions -->
+          <div id="breakdownWrap" class="mt-6 hidden">
+            <h4 class="font-semibold mb-2">Pecahan Item</h4>
+            <div class="overflow-auto border rounded-xl">
+              <table class="min-w-full text-sm">
+                <thead class="bg-gray-100">
+                  <tr>
+                    <th class="text-left px-3 py-2">Produk</th>
+                    <th class="text-left px-3 py-2">Warna/Kod</th>
+                    <th class="text-right px-3 py-2">Qty</th>
+                    <th class="text-right px-3 py-2">Harga/Unit</th>
+                    <th class="text-right px-3 py-2">Jumlah</th>
+                  </tr>
+                </thead>
+                <tbody id="breakdownBody"></tbody>
+              </table>
+            </div>
+
+            <div class="mt-4 grid sm:grid-cols-2 gap-4">
+              <div class="text-sm text-gray-600">
+                <p><span class="font-medium">Payment:</span> <span id="bdPayment">—</span></p>
+              </div>
+              <div class="text-sm text-gray-700 space-y-1">
+                <p class="flex justify-between"><span>Subtotal (Cash)</span> <span id="bdSubtotal" class="font-medium">RM0.00</span></p>
+                <p class="flex justify-between"><span>Caj E-Perolehan (15%)</span> <span id="bdFee" class="font-medium">RM0.00</span></p>
+                <p class="flex justify-between text-lg"><span class="font-semibold">Grand Total</span> <span id="bdGrand" class="font-semibold">RM0.00</span></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-3 mt-4">
+            <button id="btnTotal" type="button" class="px-4 py-2 rounded-xl bg-purple-700 text-white">TOTAL</button>
+            <button id="btnRFQ" type="button" class="px-4 py-2 rounded-xl bg-gray-900 text-white" disabled>REQUEST FOR QUOTATION</button>
+          </div>
         </div>
 
-        <!-- ================= CUSTOM (PRE ORDER) ================= -->
+        <!-- CUSTOM (PRE ORDER) -->
         <div id="customSection" class="md:col-span-2 hidden">
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
             <div>
@@ -133,9 +160,9 @@
                 <option>Paris Crepe</option>
                 <option>Dubai Polycot</option>
                 <option>Luxe Satin</option>
-                <option>French Crepe</option>
-                <option>Royal Satin</option>
-                <option>Cotton</option>
+                <option>Micro Cotton</option>
+                <option>Maria Cotton</option>
+                <option>Twilly Velvet</option>
               </select>
             </div>
             <div>
@@ -155,7 +182,6 @@
               <input id="c_qty" type="number" min="1" placeholder="cth 10" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2" />
             </div>
 
-            <!-- Variasi design (LOGO dikeluarkan) -->
             <div class="md:col-span-3">
               <label class="block text-sm font-medium">Variasi Design</label>
               <select id="c_variant" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2">
@@ -163,38 +189,36 @@
                 <option value="edit">Edit Design (RM150)</option>
                 <option value="recolor">Tukar Warna (RM50)</option>
               </select>
-              <p class="text-xs text-gray-500 mt-1">Formula: caj design = harga variasi / qty; total (Cash) = ( (caj design + kos jahit) × qty ) + harga variasi + add-on.</p>
+              <p class="text-xs text-gray-500 mt-1">Formula: caj design = harga variasi / qty; total (Cash) = (caj design × qty) + harga variasi.</p>
             </div>
 
-            <!-- Add-on -->
-            <div class="md:col-span-3">
-              <label class="block text-sm font-medium">Add-on</label>
-              <label class="flex items-center gap-2 bg-white border rounded-xl px-3 py-2 cursor-pointer w-fit">
-                <input type="checkbox" id="c_addonLogo" />
-                <span>Tambah Logo/Nama (RM100)</span>
-              </label>
-            </div>
-
-            <!-- Kos Jahit -->
-            <div class="md:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div class="md:col-span-2">
-                <label class="block text-sm font-medium">Kos Jahit (Cari Kod)</label>
-                <input id="c_sew" list="sewOptions" placeholder="Contoh: ZW1805" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2" />
-                <p id="c_sew_desc" class="text-xs text-gray-500 mt-1">—</p>
-              </div>
-              <div class="md:col-span-1">
-                <label class="block text-sm font-medium mb-2">Payment Method</label>
-                <div class="flex flex-wrap gap-3">
-                  <label class="flex items-center gap-2 bg-white border rounded-xl px-3 py-2 cursor-pointer">
-                    <input type="radio" name="paymentMethodCustom" value="Cash" />
-                    <span>Cash</span>
-                  </label>
-                  <label class="flex items-center gap-2 bg-white border rounded-xl px-3 py-2 cursor-pointer">
-                    <input type="radio" name="paymentMethodCustom" value="E-Perolehan" />
-                    <span>E-Perolehan</span>
-                  </label>
+            <!-- Add-on Logo/Nama -->
+            <div class="md:col-span-3 border rounded-xl p-3 bg-gray-50">
+              <label class="text-sm font-medium">Add-on</label>
+              <div class="mt-2 flex flex-wrap items-end gap-3">
+                <label class="flex items-center gap-2">
+                  <input id="addonLogo" type="checkbox" />
+                  <span>Tambah Logo/Nama Sendiri (RM100)</span>
+                </label>
+                <div>
+                  <label class="block text-xs text-gray-600">Qty</label>
+                  <input id="addonLogoQty" type="number" min="1" value="1" class="w-24 rounded-xl border-gray-300 px-3 py-2" />
                 </div>
               </div>
+            </div>
+          </div>
+
+          <div class="md:col-span-2 mt-4">
+            <label class="block text-sm font-medium mb-2">Payment Method</label>
+            <div class="flex flex-wrap gap-3">
+              <label class="flex items-center gap-2 bg-white border rounded-xl px-3 py-2 cursor-pointer">
+                <input type="radio" name="paymentMethodCustom" value="Cash" />
+                <span>Cash</span>
+              </label>
+              <label class="flex items-center gap-2 bg-white border rounded-xl px-3 py-2 cursor-pointer">
+                <input type="radio" name="paymentMethodCustom" value="E-Perolehan" />
+                <span>E-Perolehan</span>
+              </label>
             </div>
           </div>
 
@@ -204,6 +228,7 @@
             <button id="btnRFQCustom" type="button" class="px-4 py-2 rounded-xl bg-gray-900 text-white" disabled>REQUEST FOR QUOTATION</button>
           </div>
 
+          <!-- CUSTOM: senarai item -->
           <div id="customListWrap" class="mt-4 hidden">
             <h4 class="font-semibold mb-2">Senarai Custom Ditambah</h4>
             <div class="overflow-auto border rounded-xl">
@@ -213,15 +238,45 @@
                     <th class="text-left px-3 py-2">#</th>
                     <th class="text-left px-3 py-2">Butiran</th>
                     <th class="text-right px-3 py-2">Qty</th>
-                    <th class="text-right px-3 py-2">Jahit/Unit</th>
-                    <th class="text-right px-3 py-2">Caj Design/Unit</th>
-                    <th class="text-right px-3 py-2">Unit (Jahit+Design)</th>
+                    <th class="text-right px-3 py-2">Harga Variasi</th>
+                    <th class="text-right px-3 py-2">Caj Design</th>
                     <th class="text-right px-3 py-2">Jumlah (Cash)</th>
                     <th class="px-3 py-2"></th>
                   </tr>
                 </thead>
                 <tbody id="customListBody"></tbody>
               </table>
+            </div>
+
+            <div class="mt-6">
+              <h4 class="font-semibold mb-2">Kos Jahit (Tambah Item)</h4>
+              <div class="flex items-center justify-between gap-3">
+                <input id="sewSearchCustom" type="text" placeholder="Cari kod/description (cth ZW1701)" class="rounded-xl border-gray-300 px-3 py-2" />
+              </div>
+              <div class="mt-3 grid md:grid-cols-2 gap-3">
+                <div class="border rounded-xl p-3">
+                  <div id="sewListCustom" class="max-h-[260px] overflow-auto text-sm"></div>
+                </div>
+                <div class="border rounded-xl p-3">
+                  <h4 class="font-medium mb-2">Item Kos Jahit Ditambah</h4>
+                  <div class="overflow-auto border rounded-xl">
+                    <table class="min-w-full text-sm">
+                      <thead class="bg-gray-100">
+                        <tr>
+                          <th class="text-left px-3 py-2">Kod</th>
+                          <th class="text-left px-3 py-2">Butiran</th>
+                          <th class="text-left px-3 py-2">Material</th>
+                          <th class="text-right px-3 py-2">Qty</th>
+                          <th class="text-right px-3 py-2">Harga/Unit</th>
+                          <th class="text-right px-3 py-2">Jumlah</th>
+                          <th class="px-3 py-2"></th>
+                        </tr>
+                      </thead>
+                      <tbody id="sewChosenBodyCustom"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div class="mt-4 grid sm:grid-cols-2 gap-4">
@@ -239,7 +294,7 @@
       </form>
     </section>
 
-    <!-- ======================= QUOTATION ======================= -->
+    <!-- QUOTATION -->
     <section id="quotationSection" class="bg-white shadow-sm rounded-2xl p-6 mt-8 hidden print:block">
       <div class="text-center mb-2">
         <img src="logo-noorarfa.jpg" alt="Noor Arfa" class="mx-auto h-10 mb-2">
@@ -329,62 +384,45 @@
   </main>
 
   <script>
-    /* ====================== 0) CONFIG ====================== */
-    const SHEETS_WEBAPP_URL = "PASTE-URL-WEBAPP-ANDA-DISINI"; // <— GANTI
+    /* =======================
+       0) CONFIG
+       ======================= */
+    const SHEETS_WEBAPP_URL = "https://script.google.com/macros/s/XXXXXXXXXXXXXXXX/exec"; // <-- tukar
     const DEFAULT_SHIPPING_METHOD = "Courier";
     const E_PEROLEHAN_RATE = 0.15;
-    const ADDON_LOGO_FEE = 100;
+    const fmtRM = n => 'RM' + Number(n).toFixed(2).replace(/\B(?=(\\d{3})+(?!\\d))/g, ",");
 
-    /* ====================== 1) READY PRODUCTS ====================== */
+    /* =======================
+       1) READY PRODUCTS + SKU
+       ======================= */
     const READY_PRODUCTS = [
-      { name:"BATIK AYUNI (DUBAI CREPE)", colors:["Grey","Green","Pink","Royal Blue","Brick Red"], pricing:q=>(q>=10?90:q>=5?109:119) },
-      { name:"BATIK NURA (DUBAI CREPE)", colors:["Grey","Lavender","Pink","Olive Green","Royal Blue"], pricing:q=>(q>=10?90:q>=5?109:119) },
-      { name:"BATIK AFIYA (DUBAI CREPE)", colors:["Grey","Burgundy","Plum","Olive Green","Navy Blue"], pricing:q=>(q>=10?90:q>=5?109:119) },
-      { name:"BATIK MARSYA (DUBAI CREPE)", colors:["Moss Green","Red","Violet Purple","Royal Blue","Grey"], pricing:q=>(q>=10?90:q>=5?109:119) },
-      { name:"KAIN PASANG NONEE (ROYAL SATIN)", colors:["Emerald Green","Royal Blue"], pricing:q=>(q>=10?119:q>=5?139:159) },
-      { name:"KAIN PASANG NURISHA (ROYAL SATIN)", colors:["Black"], pricing:q=>109 },
-      { name:"KAIN PASANG MICRO COTTON - 4M BIDANG 60", colors:["Royal Blue"], pricing:q=>99 },
-      { name:"KAIN PASANG MARIA POLY COTTON - 4M BIDANG 59", colors:["Black"], pricing:q=>(q>=10?79:q>=5?89:99) },
-      { name:"KAIN PASANG PERSIAN CREPE - 4M BIDANG 60", colors:["Chili Red"], pricing:q=>99 },
-      { name:"KAIN PASANG PARIS CREPE BATIK SARA - 4M BIDANG 60", colors:["Maroon","Black"], pricing:q=>(q>=10?129:q>=5?139:149) },
-      { name:"KAIN PASANG HANIFARA (TWILLY VELVET) - 4M BIDANG 55", colors:["Light Pink","Matcha","Light Peach","Soft Grey","Sky Blue","Yellow","Butter Yellow","Peach Pink","Lilac","Orange"], pricing:q=>(q>=5?45:55) },
-      { name:"KAIN PASANG AIRA/ALYA/DHIA (ITALIAN CREPE) - 4M BIDANG 60", colors:["Maroon","Purple","Blue","Black","Greenish Yellow","Deep Blue","Green","Mustard"], pricing:q=>70 },
-      { name:"KAIN PASANG SWISS SATIN - 4M BIDANG 60", colors:["Royal Blue","Maroon","Emerald Green","Black","Soft Brown"], pricing:q=>(q>=10?99:q>=5?109:q>=3?119:129) },
-      { name:"KAIN PASANG LILY (FRENCH CREPE) - 4M BIDANG 60", colors:["Black","Maroon","Olive Green","Purple Violet","Rose Pink"], pricing:q=>(q>=10?89:99) },
+      { name:"BATIK AYUNI (DUBAI CREPE)", colors:["Grey","Green","Pink","Royal Blue","Brick Red"], pricing:q=>(q>=10?90:q>=5?109:119), fabricGroup:'SATIN_CREPE' },
+      { name:"BATIK NURA (DUBAI CREPE)", colors:["Grey","Lavender","Pink","Olive Green","Royal Blue"], pricing:q=>(q>=10?90:q>=5?109:119), fabricGroup:'SATIN_CREPE' },
+      { name:"BATIK AFIYA (DUBAI CREPE)", colors:["Grey","Burgundy","Plum","Olive Green","Navy Blue"], pricing:q=>(q>=10?90:q>=5?109:119), fabricGroup:'SATIN_CREPE' },
+      { name:"BATIK MARSYA (DUBAI CREPE)", colors:["Moss Green","Red","Violet Purple","Royal Blue","Grey"], pricing:q=>(q>=10?90:q>=5?109:119), fabricGroup:'SATIN_CREPE' },
+      { name:"KAIN PASANG NONEE (ROYAL SATIN)", colors:["Emerald Green","Royal Blue"], pricing:q=>(q>=10?119:q>=5?139:159), fabricGroup:'SATIN_CREPE' },
+      { name:"KAIN PASANG NURISHA (ROYAL SATIN)", colors:["Black"], pricing:q=>109, fabricGroup:'SATIN_CREPE' },
+      { name:"KAIN PASANG MICRO COTTON - 4M BIDANG 60", colors:["Royal Blue"], pricing:q=>99, fabricGroup:'COTTON' },
+      { name:"KAIN PASANG MARIA POLY COTTON - 4M BIDANG 59", colors:["Black"], pricing:q=>(q>=10?79:q>=5?89:99), fabricGroup:'COTTON' },
+      { name:"KAIN PASANG PERSIAN CREPE - 4M BIDANG 60", colors:["Chili Red"], pricing:q=>99, fabricGroup:'SATIN_CREPE' },
+      { name:"KAIN PASANG PARIS CREPE BATIK SARA - 4M BIDANG 60", colors:["Maroon","Black"], pricing:q=>(q>=10?129:q>=5?139:149), fabricGroup:'SATIN_CREPE' },
+      { name:"KAIN PASANG HANIFARA (TWILLY VELVET) - 4M BIDANG 55", colors:["Light Pink","Matcha","Light Peach","Soft Grey","Sky Blue","Yellow","Butter Yellow","Peach Pink","Lilac","Orange"], pricing:q=>(q>=5?45:55), fabricGroup:'COTTON' },
+      { name:"KAIN PASANG AIRA/ALYA/DHIA (ITALIAN CREPE) - 4M BIDANG 60", colors:["Maroon","Purple","Blue","Black","Greenish Yellow","Deep Blue","Green","Mustard"], pricing:q=>70, fabricGroup:'SATIN_CREPE' },
+      { name:"KAIN PASANG SWISS SATIN - 4M BIDANG 60", colors:["Royal Blue","Maroon","Emerald Green","Black","Soft Brown"], pricing:q=>(q>=10?99:q>=5?109:q>=3?119:129), fabricGroup:'SATIN_CREPE' },
+      { name:"KAIN PASANG LILY (FRENCH CREPE) - 4M BIDANG 60", colors:["Black","Maroon","Olive Green","Purple Violet","Rose Pink"], pricing:q=>(q>=10?89:99), fabricGroup:'SATIN_CREPE' },
     ];
 
-    /* ====================== 2) READY SKU MAP ====================== */
     const READY_SKU_MAP = {
-      "BATIK AYUNI (DUBAI CREPE)": {
-        "Grey":"ZA3763","Green":"AYUNI-GREEN","Pink":"AYUNI-PINK","Royal Blue":"AYUNI-RBLUE","Brick Red":"AYUNI-BRED"
-      },
-      "BATIK NURA (DUBAI CREPE)": {
-        "Grey":"NURA-GREY","Lavender":"NURA-LAVENDER","Pink":"NURA-PINK","Olive Green":"NURA-OLIVE","Royal Blue":"NURA-RBLUE"
-      },
-      "BATIK AFIYA (DUBAI CREPE)": {
-        "Grey":"AFIYA-GREY","Burgundy":"AFIYA-BURG","Plum":"AFIYA-PLUM","Olive Green":"AFIYA-OLIVE","Navy Blue":"AFIYA-NAVY"
-      },
-      "BATIK MARSYA (DUBAI CREPE)": {
-        "Moss Green":"MARSYA-MOSS","Red":"MARSYA-RED","Violet Purple":"MARSYA-VIOLET","Royal Blue":"MARSYA-RBLUE","Grey":"MARSYA-GREY"
-      },
-      "KAIN PASANG NONEE (ROYAL SATIN)": {
-        "Emerald Green":"NONEE-EMERALD","Royal Blue":"NONEE-RBLUE"
-      },
-      "KAIN PASANG NURISHA (ROYAL SATIN)": {
-        "Black":"NURISHA-BLACK"
-      },
-      "KAIN PASANG MICRO COTTON - 4M BIDANG 60": {
-        "Royal Blue":"MC60-RBLUE"
-      },
-      "KAIN PASANG MARIA POLY COTTON - 4M BIDANG 59": {
-        "Black":"MARIA59-BLACK"
-      },
-      "KAIN PASANG PERSIAN CREPE - 4M BIDANG 60": {
-        "Chili Red":"PERSIAN60-CHILI"
-      },
-      "KAIN PASANG PARIS CREPE BATIK SARA - 4M BIDANG 60": {
-        "Maroon":"SARA60-MAROON","Black":"SARA60-BLACK"
-      },
+      "BATIK AYUNI (DUBAI CREPE)": {"Grey":"ZA3763","Green":"AYUNI-GREEN","Pink":"AYUNI-PINK","Royal Blue":"AYUNI-RBLUE","Brick Red":"AYUNI-BRED"},
+      "BATIK NURA (DUBAI CREPE)": {"Grey":"NURA-GREY","Lavender":"NURA-LAVENDER","Pink":"NURA-PINK","Olive Green":"NURA-OLIVE","Royal Blue":"NURA-RBLUE"},
+      "BATIK AFIYA (DUBAI CREPE)": {"Grey":"AFIYA-GREY","Burgundy":"AFIYA-BURG","Plum":"AFIYA-PLUM","Olive Green":"AFIYA-OLIVE","Navy Blue":"AFIYA-NAVY"},
+      "BATIK MARSYA (DUBAI CREPE)": {"Moss Green":"MARSYA-MOSS","Red":"MARSYA-RED","Violet Purple":"MARSYA-VIOLET","Royal Blue":"MARSYA-RBLUE","Grey":"MARSYA-GREY"},
+      "KAIN PASANG NONEE (ROYAL SATIN)": {"Emerald Green":"NONEE-EMERALD","Royal Blue":"NONEE-RBLUE"},
+      "KAIN PASANG NURISHA (ROYAL SATIN)": {"Black":"NURISHA-BLACK"},
+      "KAIN PASANG MICRO COTTON - 4M BIDANG 60": {"Royal Blue":"MC60-RBLUE"},
+      "KAIN PASANG MARIA POLY COTTON - 4M BIDANG 59": {"Black":"MARIA59-BLACK"},
+      "KAIN PASANG PERSIAN CREPE - 4M BIDANG 60": {"Chili Red":"PERSIAN60-CHILI"},
+      "KAIN PASANG PARIS CREPE BATIK SARA - 4M BIDANG 60": {"Maroon":"SARA60-MAROON","Black":"SARA60-BLACK"},
       "KAIN PASANG HANIFARA (TWILLY VELVET) - 4M BIDANG 55": {
         "Light Pink":"HANIFARA55-LPINK","Matcha":"HANIFARA55-MATCHA","Light Peach":"HANIFARA55-LPEACH","Soft Grey":"HANIFARA55-SGREY","Sky Blue":"HANIFARA55-SKY","Yellow":"HANIFARA55-YELLOW","Butter Yellow":"HANIFARA55-BYELLOW","Peach Pink":"HANIFARA55-PEACHP","Lilac":"HANIFARA55-LILAC","Orange":"HANIFARA55-ORANGE"
       },
@@ -392,628 +430,4 @@
         "Maroon":"AAD60-MAROON","Purple":"AAD60-PURPLE","Blue":"AAD60-BLUE","Black":"AAD60-BLACK","Greenish Yellow":"AAD60-GYELLOW","Deep Blue":"AAD60-DBLUE","Green":"AAD60-GREEN","Mustard":"AAD60-MUSTARD"
       },
       "KAIN PASANG SWISS SATIN - 4M BIDANG 60": {
-        "Royal Blue":"SWISS60-RBLUE","Maroon":"SWISS60-MAROON","Emerald Green":"SWISS60-EMERALD","Black":"SWISS60-BLACK","Soft Brown":"SWISS60-SBROWN"
-      },
-      "KAIN PASANG LILY (FRENCH CREPE) - 4M BIDANG 60": {
-        "Black":"LILY60-BLACK","Maroon":"LILY60-MAROON","Olive Green":"LILY60-OLIVE","Purple Violet":"LILY60-PVIOLET","Rose Pink":"LILY60-RPINK"
-      }
-    };
-
-    /* ====================== 3) KOS JAHIT (kod & harga bertingkat) ====================== */
-    // Struktur: code, name, tiers{ satin_crepe: [ {min,max,price}, ... ], cotton: [...] }
-    const SEWING_OPTIONS = [
-      // Kurung Modern 2XL..5XL
-      { code:"ZW1805", name:"Kurung Modern 2XL", tiers:{
-        satin_crepe:[{min:5,max:19,price:95},{min:20,max:39,price:70},{min:100,max:499,price:60},{min:500,max:1e9,price:55}],
-        cotton:[{min:5,max:19,price:85},{min:20,max:39,price:65},{min:100,max:499,price:55},{min:500,max:1e9,price:50}]
-      }},
-      { code:"ZW1806", name:"Kurung Modern 3XL", tiers:{
-        satin_crepe:[{min:5,max:19,price:95},{min:20,max:39,price:70},{min:100,max:499,price:60},{min:500,max:1e9,price:55}],
-        cotton:[{min:5,max:19,price:85},{min:20,max:39,price:65},{min:100,max:499,price:55},{min:500,max:1e9,price:50}]
-      }},
-      { code:"ZW1807", name:"Kurung Modern 4XL", tiers:{
-        satin_crepe:[{min:5,max:19,price:95},{min:20,max:39,price:70},{min:100,max:499,price:60},{min:500,max:1e9,price:55}],
-        cotton:[{min:5,max:19,price:85},{min:20,max:39,price:65},{min:100,max:499,price:55},{min:500,max:1e9,price:50}]
-      }},
-      { code:"ZW1808", name:"Kurung Modern 5XL", tiers:{
-        satin_crepe:[{min:5,max:19,price:95},{min:20,max:39,price:70},{min:100,max:499,price:60},{min:500,max:1e9,price:55}],
-        cotton:[{min:5,max:19,price:85},{min:20,max:39,price:65},{min:100,max:499,price:55},{min:500,max:1e9,price:50}]
-      }},
-
-      // Kurung Modern S..XL
-      { code:"ZW1801", name:"Kurung Modern S", tiers:{
-        satin_crepe:[{min:5,max:19,price:85},{min:20,max:39,price:60},{min:100,max:499,price:50},{min:500,max:1e9,price:45}],
-        cotton:[{min:5,max:19,price:75},{min:20,max:39,price:55},{min:100,max:499,price:45},{min:500,max:1e9,price:40}]
-      }},
-      { code:"ZW1802", name:"Kurung Modern M", tiers:{
-        satin_crepe:[{min:5,max:19,price:85},{min:20,max:39,price:60},{min:100,max:499,price:50},{min:500,max:1e9,price:45}],
-        cotton:[{min:5,max:19,price:75},{min:20,max:39,price:55},{min:100,max:499,price:45},{min:500,max:1e9,price:40}]
-      }},
-      { code:"ZW1803", name:"Kurung Modern L/XL", tiers:{
-        satin_crepe:[{min:5,max:19,price:85},{min:20,max:39,price:60},{min:100,max:499,price:50},{min:500,max:1e9,price:45}],
-        cotton:[{min:5,max:19,price:75},{min:20,max:39,price:55},{min:100,max:499,price:45},{min:500,max:1e9,price:40}]
-      }},
-      { code:"ZW1804", name:"Kurung Modern XL", tiers:{
-        satin_crepe:[{min:5,max:19,price:85},{min:20,max:39,price:60},{min:100,max:499,price:50},{min:500,max:1e9,price:45}],
-        cotton:[{min:5,max:19,price:75},{min:20,max:39,price:55},{min:100,max:499,price:45},{min:500,max:1e9,price:40}]
-      }},
-
-      // Kurung Pahang 2XL..5XL
-      { code:"ZW1705", name:"Kurung Pahang 2XL", tiers:{
-        satin_crepe:[{min:5,max:19,price:95},{min:20,max:39,price:70},{min:100,max:499,price:60},{min:500,max:1e9,price:55}],
-        cotton:[{min:5,max:19,price:85},{min:20,max:39,price:65},{min:100,max:499,price:55},{min:500,max:1e9,price:50}]
-      }},
-      { code:"ZW1706", name:"Kurung Pahang 3XL", tiers:{
-        satin_crepe:[{min:5,max:19,price:95},{min:20,max:39,price:70},{min:100,max:499,price:60},{min:500,max:1e9,price:55}],
-        cotton:[{min:5,max:19,price:85},{min:20,max:39,price:65},{min:100,max:499,price:55},{min:500,max:1e9,price:50}]
-      }},
-      { code:"ZW1707", name:"Kurung Pahang 4XL", tiers:{
-        satin_crepe:[{min:5,max:19,price:95},{min:20,max:39,price:70},{min:100,max:499,price:60},{min:500,max:1e9,price:55}],
-        cotton:[{min:5,max:19,price:85},{min:20,max:39,price:65},{min:100,max:499,price:55},{min:500,max:1e9,price:50}]
-      }},
-      { code:"ZW1708", name:"Kurung Pahang 5XL", tiers:{
-        satin_crepe:[{min:5,max:19,price:95},{min:20,max:39,price:70},{min:100,max:499,price:60},{min:500,max:1e9,price:55}],
-        cotton:[{min:5,max:19,price:85},{min:20,max:39,price:65},{min:100,max:499,price:55},{min:500,max:1e9,price:50}]
-      }},
-
-      // Kurung Pahang S..XL
-      { code:"ZW1701", name:"Kurung Pahang S", tiers:{
-        satin_crepe:[{min:5,max:19,price:85},{min:20,max:39,price:60},{min:100,max:499,price:50},{min:500,max:1e9,price:45}],
-        cotton:[{min:5,max:19,price:75},{min:20,max:39,price:55},{min:100,max:499,price:45},{min:500,max:1e9,price:40}]
-      }},
-      { code:"ZW1702", name:"Kurung Pahang M", tiers:{
-        satin_crepe:[{min:5,max:19,price:85},{min:20,max:39,price:60},{min:100,max:499,price:50},{min:500,max:1e9,price:45}],
-        cotton:[{min:5,max:19,price:75},{min:20,max:39,price:55},{min:100,max:499,price:45},{min:500,max:1e9,price:40}]
-      }},
-      { code:"ZW1703", name:"Kurung Pahang L", tiers:{
-        satin_crepe:[{min:5,max:19,price:85},{min:20,max:39,price:60},{min:100,max:499,price:50},{min:500,max:1e9,price:45}],
-        cotton:[{min:5,max:19,price:75},{min:20,max:39,price:55},{min:100,max:499,price:45},{min:500,max:1e9,price:40}]
-      }},
-      { code:"ZW1704", name:"Kurung Pahang XL", tiers:{
-        satin_crepe:[{min:5,max:19,price:85},{min:20,max:39,price:60},{min:100,max:499,price:50},{min:500,max:1e9,price:45}],
-        cotton:[{min:5,max:19,price:75},{min:20,max:39,price:55},{min:100,max:499,price:45},{min:500,max:1e9,price:40}]
-      }},
-
-      // Kemeja L/PDK S..XL
-      { code:"ZW1501", name:"Kemeja L/PDK S", tiers:{
-        satin_crepe:[{min:5,max:19,price:119},{min:20,max:39,price:85},{min:100,max:499,price:60},{min:500,max:1e9,price:55}],
-        cotton:[{min:5,max:19,price:100},{min:20,max:39,price:70},{min:100,max:499,price:55},{min:500,max:1e9,price:50}]
-      }},
-      { code:"ZW1502", name:"Kemeja L/PDK M", tiers:{
-        satin_crepe:[{min:5,max:19,price:119},{min:20,max:39,price:85},{min:100,max:499,price:60},{min:500,max:1e9,price:55}],
-        cotton:[{min:5,max:19,price:100},{min:20,max:39,price:70},{min:100,max:499,price:55},{min:500,max:1e9,price:50}]
-      }},
-      { code:"ZW1503", name:"Kemeja L/PDK L", tiers:{
-        satin_crepe:[{min:5,max:19,price:119},{min:20,max:39,price:85},{min:100,max:499,price:60},{min:500,max:1e9,price:55}],
-        cotton:[{min:5,max:19,price:100},{min:20,max:39,price:70},{min:100,max:499,price:55},{min:500,max:1e9,price:50}]
-      }},
-      { code:"ZW1504", name:"Kemeja L/PDK XL", tiers:{
-        satin_crepe:[{min:5,max:19,price:119},{min:20,max:39,price:85},{min:100,max:499,price:60},{min:500,max:1e9,price:55}],
-        cotton:[{min:5,max:19,price:100},{min:20,max:39,price:70},{min:100,max:499,price:55},{min:500,max:1e9,price:50}]
-      }},
-
-      // Kemeja LPJG S..XL
-      { code:"ZW1601", name:"Kemeja LPJG S", tiers:{
-        satin_crepe:[{min:5,max:19,price:119},{min:20,max:39,price:85},{min:100,max:499,price:60},{min:500,max:1e9,price:55}],
-        cotton:[{min:5,max:19,price:100},{min:20,max:39,price:70},{min:100,max:499,price:55},{min:500,max:1e9,price:50}]
-      }},
-      { code:"ZW1602", name:"Kemeja LPJG M", tiers:{
-        satin_crepe:[{min:5,max:19,price:119},{min:20,max:39,price:85},{min:100,max:499,price:60},{min:500,max:1e9,price:55}],
-        cotton:[{min:5,max:19,price:100},{min:20,max:39,price:70},{min:100,max:499,price:55},{min:500,max:1e9,price:50}]
-      }},
-      { code:"ZW1603", name:"Kemeja LPJG L", tiers:{
-        satin_crepe:[{min:5,max:19,price:119},{min:20,max:39,price:85},{min:100,max:499,price:60},{min:500,max:1e9,price:55}],
-        cotton:[{min:5,max:19,price:100},{min:20,max:39,price:70},{min:100,max:499,price:55},{min:500,max:1e9,price:50}]
-      }},
-      { code:"ZW1604", name:"Kemeja LPJG XL", tiers:{
-        satin_crepe:[{min:5,max:19,price:119},{min:20,max:39,price:85},{min:100,max:499,price:60},{min:500,max:1e9,price:55}],
-        cotton:[{min:5,max:19,price:100},{min:20,max:39,price:70},{min:100,max:499,price:55},{min:500,max:1e9,price:50}]
-      }},
-
-      // Kemeja LPJG 2XL..4XL
-      { code:"ZW1605", name:"Kemeja LPJG 2XL", tiers:{
-        satin_crepe:[{min:5,max:19,price:129},{min:20,max:39,price:85},{min:100,max:499,price:60},{min:500,max:1e9,price:55}],
-        cotton:[{min:5,max:19,price:100},{min:20,max:39,price:70},{min:100,max:499,price:55},{min:500,max:1e9,price:50}]
-      }},
-      { code:"ZW1607", name:"Kemeja LPJG 3XL", tiers:{
-        satin_crepe:[{min:5,max:19,price:129},{min:20,max:39,price:85},{min:100,max:499,price:60},{min:500,max:1e9,price:55}],
-        cotton:[{min:5,max:19,price:100},{min:20,max:39,price:70},{min:100,max:499,price:55},{min:500,max:1e9,price:50}]
-      }},
-      { code:"ZW1608", name:"Kemeja LPJG 4XL", tiers:{
-        satin_crepe:[{min:5,max:19,price:129},{min:20,max:39,price:85},{min:100,max:499,price:60},{min:500,max:1e9,price:55}],
-        cotton:[{min:5,max:19,price:100},{min:20,max:39,price:70},{min:100,max:499,price:55},{min:500,max:1e9,price:50}]
-      }}
-    ];
-
-    /* ====================== 4) HELPERS ====================== */
-    const fmtRM = n => 'RM' + Number(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    function materialFromReadyName(name=''){ const s = name.toUpperCase(); if (s.includes('COTTON')) return 'cotton'; return 'satin_crepe'; }
-    function materialFromCustom(value=''){ const s = value.toUpperCase(); if (s.includes('POLYCOT') || s.includes('COTTON')) return 'cotton'; return 'satin_crepe'; }
-    function getSewOption(code){ if (!code) return null; const c=code.trim().toUpperCase(); return SEWING_OPTIONS.find(o=>o.code===c) || null; }
-    function priceFromTiers(tiers=[], qty=1){ const q=Math.max(1,qty); const hit=tiers.find(t=>q>=t.min && q<=t.max); return hit?hit.price:(tiers.length?tiers[tiers.length-1].price:0); }
-    function getSewPricePerUnit(code, materialCat, qty){ const opt=getSewOption(code); if(!opt) return 0; const tiers = opt.tiers[materialCat] || opt.tiers['satin_crepe'] || []; return priceFromTiers(tiers, qty); }
-    function makeFallbackSKU(productName, color){ const p=(productName||'').replace(/[^A-Z0-9]+/gi,' ').trim().split(/\s+/).map(w=>w[0]).join('').toUpperCase(); const c=(color||'').replace(/\s+/g,'').replace(/[^A-Za-z0-9]/g,'').toUpperCase(); return (p?p:'SKU')+'-'+(c?c:'NA'); }
-
-    // populate datalist
-    function populateSewingDatalist(){
-      const dl = document.getElementById('sewOptions');
-      dl.innerHTML = SEWING_OPTIONS.sort((a,b)=>a.code.localeCompare(b.code))
-        .map(o=>`<option value="${o.code}">${o.name}</option>`).join('');
-    }
-    populateSewingDatalist();
-
-    /* ====================== 5) DOM REFS ====================== */
-    const modeReady = document.getElementById('modeReady');
-    const modeCustom = document.getElementById('modeCustom');
-    const readySection = document.getElementById('readySection');
-    const customSection = document.getElementById('customSection');
-
-    const readyList = document.getElementById('readyList');
-    const readySearch = document.getElementById('readySearch');
-
-    const readyAddedWrap = document.getElementById('readyAddedWrap');
-    const readyAddedBody = document.getElementById('readyAddedBody');
-
-    const bdPayment = document.getElementById('bdPayment');
-    const bdSubtotal = document.getElementById('bdSubtotal');
-    const bdFee = document.getElementById('bdFee');
-    const bdGrand = document.getElementById('bdGrand');
-
-    const btnTotal = document.getElementById('btnTotal');
-    const btnRFQ = document.getElementById('btnRFQ');
-
-    const btnAddCustom = document.getElementById('btnAddCustom');
-    const btnTotalCustom = document.getElementById('btnTotalCustom');
-    const btnRFQCustom = document.getElementById('btnRFQCustom');
-
-    const quotationSection = document.getElementById('quotationSection');
-    const qBody = document.getElementById('qBody');
-    const qInvNo = document.getElementById('qInvNo');
-    const qDate = document.getElementById('qDate');
-    const qRef = document.getElementById('qRef');
-    const qTerm = document.getElementById('qTerm');
-    const qSales = document.getElementById('qSales');
-    const qInWords = document.getElementById('qInWords');
-    const qGrand = document.getElementById('qGrand');
-    const btnSubmitOrder = document.getElementById('btnSubmitOrder');
-
-    // CUSTOM refs
-    const c_material = document.getElementById('c_material');
-    const c_pattern  = document.getElementById('c_pattern');
-    const c_color    = document.getElementById('c_color');
-    const c_meter    = document.getElementById('c_meter');
-    const c_qty      = document.getElementById('c_qty');
-    const c_variant  = document.getElementById('c_variant');
-    const c_addonLogo= document.getElementById('c_addonLogo');
-    const c_sew      = document.getElementById('c_sew');
-    const c_sew_desc = document.getElementById('c_sew_desc');
-
-    /* ====================== 6) STATE ====================== */
-    let readyItems = []; // {name,color,qty,sku,sewCode,sewPrice,unitFabric,amount}
-    let customItems = [];
-    let LAST_ORDER_PAYLOAD = null;
-
-    /* ====================== 7) UI TOGGLE ====================== */
-    function toggleSections(){
-      const mode = document.querySelector('input[name="productMode"]:checked')?.value;
-      readySection.classList.toggle('hidden', mode!=='ready');
-      customSection.classList.toggle('hidden', mode!=='custom');
-    }
-    document.querySelectorAll('input[name="productMode"]').forEach(r=>r.addEventListener('change', toggleSections));
-
-    /* ====================== 8) READY: RENDER CARDS ====================== */
-    function priceHint(prod){
-      const s1=prod.pricing(1), s5=prod.pricing(5), s10=prod.pricing(10);
-      if (s1!==s5 || s5!==s10) return `Harga kain: 1–4 ${fmtRM(s1)} | 5–9 ${fmtRM(s5)} | ≥10 ${fmtRM(s10)}`;
-      return "Harga kain: " + fmtRM(s1) + " /pasang";
-    }
-    function buildProductCard(prod, index){
-      const card=document.createElement('div');
-      card.className="border rounded-xl p-4 bg-white";
-      card.dataset.index=index;
-      card.innerHTML=`
-        <p class="font-semibold mb-2">${prod.name}</p>
-        <label class="block text-sm font-medium">Pilih Warna</label>
-        <select class="w-full border rounded-xl mb-2 px-3 py-2 sel-color">
-          ${prod.colors.map(c=>`<option>${c}</option>`).join('')}
-        </select>
-
-        <div class="grid grid-cols-1 gap-2 mb-2">
-          <div class="">
-            <label class="block text-sm font-medium">Kos Jahit (Cari Kod)</label>
-            <input list="sewOptions" placeholder="cth ZW1805" class="w-full border rounded-xl px-3 py-2 inp-sew" />
-            <p class="text-xs text-gray-500 mt-1 sew-desc">—</p>
-          </div>
-        </div>
-
-        <p class="text-sm mb-2 text-gray-700">${priceHint(prod)}</p>
-        <label class="block text-sm font-medium">Quantity</label>
-        <input type="number" min="0" placeholder="0" class="w-full border rounded-xl px-3 py-2 inp-qty" />
-
-        <button type="button" class="mt-3 px-3 py-2 rounded-xl bg-gray-200 w-full btn-add">Tambah</button>
-      `;
-      return card;
-    }
-    function renderProducts(list=READY_PRODUCTS){
-      readyList.innerHTML = list.map((p,i)=>buildProductCard(p,i).outerHTML).join('');
-    }
-    renderProducts();
-
-    readySearch?.addEventListener('input', ()=>{
-      const q=readySearch.value.toLowerCase();
-      const filtered=READY_PRODUCTS.filter(p=>p.name.toLowerCase().includes(q));
-      renderProducts(filtered);
-    });
-
-    // Live hint harga jahit/unit ikut kod + qty + material (READY)
-    readyList.addEventListener('input', (e)=>{
-      const wrap = e.target.closest('[data-index]');
-      if(!wrap) return;
-      const idx = Number(wrap.dataset.index);
-      const prod = READY_PRODUCTS[idx];
-      const matCat = materialFromReadyName(prod.name);
-      const qty = Number(wrap.querySelector('.inp-qty')?.value || 1);
-      const code = wrap.querySelector('.inp-sew')?.value || '';
-      const descEl = wrap.querySelector('.sew-desc');
-      const unit = getSewPricePerUnit(code, matCat, qty);
-      descEl.textContent = (code && unit>0) ? `Kos jahit/unit (${matCat.replace('_','/')}): ${fmtRM(unit)}` : '—';
-    });
-
-    // Tambah item READY
-    readyList.addEventListener('click', (e)=>{
-      if(!e.target.classList.contains('btn-add')) return;
-      const card = e.target.closest('[data-index]');
-      const idx = Number(card.dataset.index);
-      const prod = READY_PRODUCTS[idx];
-
-      const color = card.querySelector('.sel-color').value;
-      const qty = Number(card.querySelector('.inp-qty').value || 0);
-      if(qty<=0){ alert('Sila masukkan kuantiti (>0).'); return; }
-
-      const sku = (READY_SKU_MAP[prod.name] && READY_SKU_MAP[prod.name][color]) || makeFallbackSKU(prod.name, color);
-      const unitFabric = prod.pricing(qty);
-
-      const sewCode = (card.querySelector('.inp-sew').value || '').trim().toUpperCase();
-      const matCat  = materialFromReadyName(prod.name);
-      const sewUnit = getSewPricePerUnit(sewCode, matCat, qty);
-
-      const amount = (unitFabric + sewUnit) * qty;
-
-      readyItems.push({
-        name: prod.name, color, qty, sku,
-        sewCode, sewPrice: sewUnit,
-        unitFabric, amount
-      });
-
-      renderReadyAdded();
-      card.querySelector('.inp-qty').value='';
-      card.querySelector('.inp-sew').value='';
-      card.querySelector('.sew-desc').textContent='—';
-    });
-
-    function currentPayment(){ return document.querySelector('input[name="paymentMethodReady"]:checked')?.value || null; }
-
-    function computeTotalsReady(items, payment){
-      const subtotal = items.reduce((s,it)=> s + it.amount, 0);
-      const fee = payment === 'E-Perolehan' ? subtotal * E_PEROLEHAN_RATE : 0;
-      const grand = subtotal + fee;
-      return {subtotal, fee, grand};
-    }
-
-    function renderReadyAdded(){
-      readyAddedBody.innerHTML = readyItems.map((it,idx)=>`
-        <tr>
-          <td class="px-3 py-2">${it.name}</td>
-          <td class="px-3 py-2">${it.color}</td>
-          <td class="px-3 py-2">${it.sewCode || '—'}</td>
-          <td class="px-3 py-2 text-right">${fmtRM(it.sewPrice)}</td>
-          <td class="px-3 py-2 text-right">${fmtRM(it.unitFabric)}</td>
-          <td class="px-3 py-2 text-right">${it.qty}</td>
-          <td class="px-3 py-2 text-right">${fmtRM(it.amount)}</td>
-          <td class="px-3 py-2 text-right"><button class="text-red-600 underline" data-del="${idx}">Delete</button></td>
-        </tr>
-      `).join('');
-      readyAddedWrap.classList.toggle('hidden', readyItems.length===0);
-      btnRFQ.disabled = readyItems.length===0;
-    }
-    readyAddedBody.addEventListener('click', (e)=>{
-      const idx = e.target?.dataset?.del;
-      if(idx!==undefined){ readyItems.splice(Number(idx),1); renderReadyAdded(); }
-    });
-
-    btnTotal.addEventListener('click', ()=>{
-      const pay = currentPayment();
-      if(!readyItems.length){ alert('Belum ada item ditambah.'); return; }
-      const totals = computeTotalsReady(readyItems, pay);
-      bdPayment.textContent = pay || '—';
-      bdSubtotal.textContent = fmtRM(totals.subtotal);
-      bdFee.textContent = fmtRM(totals.fee);
-      bdGrand.textContent = fmtRM(totals.grand);
-      document.getElementById('readyAddedWrap').scrollIntoView({behavior:'smooth'});
-    });
-
-    /* ====================== 9) CUSTOM LOGIC ====================== */
-    const VARIANT_PRICE = { new:500, edit:150, recolor:50 };
-
-    function currentPaymentCustom(){ return document.querySelector('input[name="paymentMethodCustom"]:checked')?.value || null; }
-
-    // live hint kos jahit (custom)
-    function refreshCustomSewHint(){
-      const qty = Number(c_qty.value || 1);
-      const matCat = materialFromCustom(c_material.value || '');
-      const unit = getSewPricePerUnit(c_sew.value, matCat, qty);
-      c_sew_desc.textContent = (c_sew.value && unit>0)
-        ? `Kos jahit/unit (${matCat.replace('_','/')}): ${fmtRM(unit)}`
-        : '—';
-    }
-    ['input','change'].forEach(ev=>{
-      c_sew.addEventListener(ev, refreshCustomSewHint);
-      c_qty.addEventListener(ev, refreshCustomSewHint);
-      c_material.addEventListener(ev, refreshCustomSewHint);
-    });
-
-    function addCustomItem(){
-      const qty = Number(c_qty.value || 0);
-      const meter = Number(c_meter.value || 0);
-      if (!c_material.value || !c_pattern.value || !c_color.value || !qty || qty<=0) {
-        alert('Sila lengkapkan Material, Corak, Warna dan Quantity (>0).');
-        return;
-      }
-      const vp = VARIANT_PRICE[c_variant.value] || 0;
-      const designCharge = qty ? (vp / qty) : 0;
-
-      const matCat = materialFromCustom(c_material.value || '');
-      const sewCode = (c_sew.value || '').trim().toUpperCase();
-      const sewUnit = getSewPricePerUnit(sewCode, matCat, qty);
-
-      const unitCombined = designCharge + sewUnit;
-      const totalCash = (unitCombined * qty) + vp + (c_addonLogo.checked ? ADDON_LOGO_FEE : 0);
-
-      customItems.push({
-        material: c_material.value, pattern: c_pattern.value, color: c_color.value,
-        meter, qty, variant: c_variant.value, variantText: c_variant.options[c_variant.selectedIndex].text,
-        variantPrice: vp, designCharge, sewCode, sewPrice: sewUnit,
-        addonLogo: !!c_addonLogo.checked, addonFee: c_addonLogo.checked ? ADDON_LOGO_FEE : 0,
-        unitCombined, totalCash
-      });
-
-      c_meter.value=''; c_qty.value=''; c_sew.value=''; c_sew_desc.textContent='—'; c_addonLogo.checked=false;
-      renderCustomList();
-    }
-    function renderCustomList(){
-      const tbody = document.getElementById('customListBody');
-      tbody.innerHTML = customItems.map((it,idx)=>`
-        <tr>
-          <td class="px-3 py-2">${idx+1}</td>
-          <td class="px-3 py-2">
-            <div class="font-medium">${it.material} — ${it.pattern} (${it.color})</div>
-            <div class="text-xs text-gray-500">Kos Jahit: ${it.sewCode || '—'} (${fmtRM(it.sewPrice)}/unit) ${it.addonLogo?'| Add-on Logo: '+fmtRM(it.addonFee):''}</div>
-          </td>
-          <td class="px-3 py-2 text-right">${it.qty}</td>
-          <td class="px-3 py-2 text-right">${fmtRM(it.sewPrice)}</td>
-          <td class="px-3 py-2 text-right">${fmtRM(it.designCharge)}</td>
-          <td class="px-3 py-2 text-right">${fmtRM(it.unitCombined)}</td>
-          <td class="px-3 py-2 text-right">${fmtRM(it.totalCash)}</td>
-          <td class="px-3 py-2 text-right"><button class="text-red-600 underline" data-del="${idx}">Delete</button></td>
-        </tr>
-      `).join('');
-      document.getElementById('customListWrap').classList.toggle('hidden', customItems.length===0);
-      btnRFQCustom.disabled = customItems.length===0;
-    }
-    document.getElementById('customListBody').addEventListener('click', (e)=>{
-      const idx = e.target?.dataset?.del;
-      if(idx!==undefined){ customItems.splice(Number(idx),1); renderCustomList(); }
-    });
-
-    function computeTotalsCustom(items, payment){
-      const subtotal = items.reduce((s,i)=> s + i.totalCash, 0);
-      const fee = payment === 'E-Perolehan' ? subtotal * E_PEROLEHAN_RATE : 0;
-      const grand = subtotal + fee;
-      return {subtotal, fee, grand};
-    }
-
-    btnAddCustom?.addEventListener('click', addCustomItem);
-    btnTotalCustom?.addEventListener('click', ()=>{
-      const pay = currentPaymentCustom();
-      if(!pay){ alert('Sila pilih Payment Method (Cash/E-Perolehan).'); return; }
-      const totals = computeTotalsCustom(customItems, pay);
-      document.getElementById('cbdPayment').textContent = pay;
-      document.getElementById('cbdSubtotal').textContent = fmtRM(totals.subtotal);
-      document.getElementById('cbdFee').textContent = fmtRM(totals.fee);
-      document.getElementById('cbdGrand').textContent = fmtRM(totals.grand);
-      if(customItems.length){ document.getElementById('customListWrap').classList.remove('hidden'); document.getElementById('customListWrap').scrollIntoView({behavior:'smooth'}); }
-    });
-
-    /* ====================== 10) QUOTATION + SUBMIT ====================== */
-    function collectCustomerForPayload(){
-      const addr=(document.getElementById('address').value||'').split('\n');
-      return {
-        fullName: document.getElementById('fullName').value || '',
-        email: document.getElementById('email').value || '',
-        phone: document.getElementById('phone').value || '',
-        company: document.getElementById('company').value || '',
-        address_line1: addr[0] || '',
-        address_line2: addr[1] || '',
-        address_line3: addr.length>2 ? addr.slice(2).join(' ') : ''
-      };
-    }
-    function populateQuotation(items, totals, payment) {
-      const name=document.getElementById('fullName').value||'';
-      const company=document.getElementById('company').value||'';
-      const address=(document.getElementById('address').value||'').split('\n');
-      const email=document.getElementById('email').value||'';
-      const phone=document.getElementById('phone').value||'';
-      const picName=document.getElementById('picName')?.value||'';
-      const picRole=document.getElementById('picRole')?.value||'';
-
-      document.getElementById('qCustLine1').textContent=company||name||'—';
-      document.getElementById('qCustLine2').textContent=address[0]||'—';
-      document.getElementById('qCustLine3').textContent=address[1]||(email?email:'—');
-      document.getElementById('qCustLine4').textContent=phone?phone:(address[2]||'—');
-
-      const now=new Date(); const pad=n=>String(n).padStart(2,'0');
-      qInvNo.textContent=`IV-NAE${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}${pad(now.getHours())}${pad(now.getMinutes())}`;
-      qDate.textContent=`${pad(now.getDate())}/${pad(now.getMonth()+1)}/${now.getFullYear()} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
-      qRef.textContent=payment||'CASH';
-      qTerm.textContent='30 DAYS';
-      qSales.textContent='CA';
-
-      qBody.innerHTML = items.map((it,idx)=>`
-        <tr>
-          <td>${idx+1}</td>
-          <td>${it.sku || '—'}</td>
-          <td>${it.name}</td>
-          <td class="text-right">${it.qty}</td>
-          <td>UNIT</td>
-          <td class="text-right">${fmtRM(it.unit)}</td>
-          <td class="text-right">${fmtRM(it.amount)}</td>
-        </tr>
-      `).join('');
-
-      qInWords.textContent = totals.grand>0 ? (toWordsEN(Math.round(totals.grand))+' RINGGIT ONLY') : '—';
-      qGrand.textContent = fmtRM(totals.grand);
-      document.getElementById('qDiscount').textContent='0.00';
-
-      document.getElementById('qStaff').textContent =
-        (picName && picRole) ? `${picName.toUpperCase()} (${picRole.toUpperCase()})`
-                             : 'ANIS SOLEHAH (PEGAWAI WEBSITE)';
-
-      quotationSection.classList.remove('hidden');
-      quotationSection.scrollIntoView({behavior:'smooth'});
-    }
-    function toWordsEN(num){
-      const a=["","ONE","TWO","THREE","FOUR","FIVE","SIX","SEVEN","EIGHT","NINE","TEN","ELEVEN","TWELVE","THIRTEEN","FOURTEEN","FIFTEEN","SIXTEEN","SEVENTEEN","EIGHTEEN","NINETEEN"];
-      const b=["","","TWENTY","THIRTY","FORTY","FIFTY","SIXTY","SEVENTY","EIGHTY","NINETY"];
-      const g=[""," THOUSAND"," MILLION"," BILLION"];
-      if(num===0) return "ZERO";
-      let words="",i=0; while(num>0){ let chunk=num%1000;
-        if(chunk){ let str=""; if(chunk>99){str+=a[Math.floor(chunk/100)]+" HUNDRED "; chunk%=100;}
-          if(chunk>19){ str+=b[Math.floor(chunk/10)]+" "; chunk%=10; }
-          if(chunk>0){ str+=a[chunk]+" "; }
-          words=str.trim()+g[i]+" "+words;
-        } num=Math.floor(num/1000); i++;
-      } return words.trim();
-    }
-
-    // READY → RFQ
-    btnRFQ.addEventListener('click', ()=>{
-      const pay = currentPayment();
-      if(!readyItems.length){ alert('Belum ada item ditambah.'); return; }
-      const totals = computeTotalsReady(readyItems, pay);
-
-      const itemsForInvoice = readyItems.map(it=>({
-        name: `${it.name} (${it.color})` + (it.sewCode? ` [Sew ${it.sewCode}]`:''),
-        qty: it.qty,
-        unit: it.unitFabric + it.sewPrice,
-        amount: it.amount,
-        sku: it.sku
-      }));
-
-      const customer = collectCustomerForPayload();
-      LAST_ORDER_PAYLOAD = {
-        source:"noorarfa-rfq", mode:"ready",
-        payment_method: pay || "Cash",
-        shipping_method: DEFAULT_SHIPPING_METHOD,
-        items: readyItems.map(it=>({
-          sku: it.sku,
-          name: `${it.name} (${it.color})` + (it.sewCode? ` [Sew ${it.sewCode}]`:''),
-          qty: it.qty,
-          unit_price: it.unitFabric + it.sewPrice,
-          amount: it.amount,
-          sew_code: it.sewCode,
-          sew_unit: it.sewPrice,
-          fabric_unit: it.unitFabric
-        })),
-        totals, customer
-      };
-
-      populateQuotation(itemsForInvoice, totals, pay);
-      btnSubmitOrder.disabled=false;
-    });
-
-    // CUSTOM → RFQ
-    btnRFQCustom?.addEventListener('click', ()=>{
-      const pay = currentPaymentCustom();
-      if(!customItems.length){ alert('Sila tambah sekurang-kurangnya satu item custom.'); return; }
-      const totals = computeTotalsCustom(customItems, pay);
-
-      const itemsForInvoice = customItems.map(ci=>({
-        name: `${ci.material} – ${ci.pattern} (${ci.color}) [${ci.variantText}]` + (ci.sewCode? ` [Sew ${ci.sewCode}]`:'') + (ci.addonLogo?' [Logo]':''),
-        qty: ci.qty,
-        unit: ci.unitCombined,
-        amount: ci.totalCash,
-        sku: '' // tiada kod produk utk custom
-      }));
-
-      const customer = collectCustomerForPayload();
-      LAST_ORDER_PAYLOAD = {
-        source:"noorarfa-rfq", mode:"custom",
-        payment_method: pay || "Cash",
-        shipping_method: DEFAULT_SHIPPING_METHOD,
-        items: customItems.map(ci=>({
-          sku: '',
-          name: `${ci.material} – ${ci.pattern} (${ci.color}) [${ci.variantText}]` + (ci.sewCode? ` [Sew ${ci.sewCode}]`:'') + (ci.addonLogo?' [Logo]':''),
-          qty: ci.qty,
-          unit_price: ci.unitCombined,
-          amount: ci.totalCash,
-          sew_code: ci.sewCode,
-          sew_unit: ci.sewPrice,
-          design_unit: ci.designCharge,
-          variant_price: ci.variantPrice,
-          addon_logo: ci.addonLogo,
-          addon_fee: ci.addonFee
-        })),
-        totals, customer
-      };
-
-      populateQuotation(itemsForInvoice, totals, pay);
-      btnSubmitOrder.disabled=false;
-    });
-
-    // Submit ke Google Sheets
-    async function sendToSheets(payload){
-      try{
-        const res = await fetch(SHEETS_WEBAPP_URL, {
-          method:'POST',
-          headers:{'Content-Type':'text/plain'},
-          body: JSON.stringify(payload)
-        });
-        let msg='Order dihantar ke Google Sheets.';
-        try {
-          const data=await res.json();
-          if(data?.ok && data?.orderId) msg=`Order dihantar! Order ID: ${data.orderId}`;
-        } catch(_) {}
-        alert(msg);
-      } catch(err){
-        console.error(err);
-        alert('Maaf, gagal hantar ke Google Sheets. Cuba lagi.');
-      }
-    }
-    btnSubmitOrder.addEventListener('click', async ()=>{
-      if(!LAST_ORDER_PAYLOAD){ alert('Sila jana quotation dahulu.'); return; }
-      const ok = confirm('Hantar order ini ke Noor Arfa (Google Sheets)?'); if(!ok) return;
-      await sendToSheets(LAST_ORDER_PAYLOAD);
-    });
-
-    // Init
-    function initReadyCards(){
-      // reattach listeners already bound via delegation
-    }
-    function renderAll(){ renderProducts(); initReadyCards(); }
-    renderAll();
-    modeReady.checked=true; toggleSections();
-  </script>
-
-  <style>
-    .invoice-table { border-collapse: collapse; width: 100%; }
-    .invoice-table th, .invoice-table td { border-top: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb; padding: 8px 10px; }
-    .invoice-table thead th { background:#f3f4f6; text-align:left; }
-    @media print {
-      body * { visibility: hidden !important; }
-      #quotationSection, #quotationSection * { visibility: visible !important; }
-      #quotationSection { position: absolute; left:0; top:0; width:100%; box-shadow:none !important; border-radius:0 !important; }
-      .no-print { display:none !important; }
-    }
-  </style>
-</body>
-</html>
+        "Royal Blue":"SWISS60-RBLUE","Maroon":"SWISS60-MAROON","Emerald Green":"SWISS60-EMERALD","Black":"SWISS60-BLACK","Soft Brown
