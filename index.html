@@ -734,22 +734,28 @@
     }
 
     /* ===== Sewing price engine ===== */
-    function detectFamilyFromReady() {
-      // take the first ready item with qty>0
-      const cards = [...readyList.querySelectorAll('[data-index]')];
-      for (const card of cards) {
-        const idx = Number(card.dataset.index);
-        const prod = READY_PRODUCTS[idx];
-        const qtyVal = Number(card.querySelector('input[type="number"]').value || 0);
-        if (qtyVal>0) {
-          const nm = prod.name.toUpperCase();
-          for (const m of FAMILY_FROM_NAME) {
-            if (nm.includes(m.key)) return m.fam;
-          }
+   // GANTI FUNGSI INI
+function detectFamilyFromReady() {
+  const cards = [...readyList.querySelectorAll('[data-index]')];
+  let bestFam = null, bestQty = 0;
+
+  for (const card of cards) {
+    const idx = Number(card.dataset.index);
+    const prod = READY_PRODUCTS[idx];
+    const qtyVal = Number(card.querySelector('input[type="number"]').value || 0);
+    if (qtyVal > 0) {
+      const nm = prod.name.toUpperCase();
+      for (const m of FAMILY_FROM_NAME) {
+        if (nm.includes(m.key)) {
+          if (qtyVal > bestQty) { bestQty = qtyVal; bestFam = m.fam; }
+          break;
         }
       }
-      return null;
     }
+  }
+  return bestFam; // boleh jadi null kalau tiada qty
+}
+
     function materialToFamily(materialStr){
       const s = (materialStr||'').toUpperCase();
       for (const m of FAMILY_FROM_NAME) if (s.includes(m.key)) return m.fam;
@@ -927,18 +933,26 @@
       sewSuggestCustom.innerHTML=''; sewSuggestCustom.classList.add('hidden');
     });
     btnAddSewCustom.addEventListener('click', ()=>{
-      const code = (sewSearchCustom.value||'').trim().toUpperCase();
-      const qty = Number(sewQtyCustom.value||0);
-      const fam = sewMaterialCustom.value;
-      const ok = priceSew(code, fam, qty);
-      if (!ok.ok){ warnSewCustom.classList.remove('hidden'); return; }
-      warnSewCustom.classList.add('hidden');
+  const code = (sewSearchCustom.value||'').trim().toUpperCase();
+  const qty  = Number(sewQtyCustom.value||0);
+  let fam    = sewMaterialCustom.value;
 
-      const meta = SEWING_MAP[code];
-      const amount = ok.unit * qty;
-      sewCustomItems.push({code, name: meta.name, fam, qty, unit: ok.unit, amount});
-      renderSewTable(sewBodyCustom, sewCustomItems, sewListWrapCustom, 'custom');
-    });
+  // >>> INI TAMBAHAN UTAMA: AUTO ikut dropdown "c_material"
+  if (fam === 'AUTO') {
+    // cuba detect family berdasarkan teks pilihan material custom
+    fam = materialToFamily(c_material.value) || 'PARIS_CREPE'; // fallback sesuai custom
+  }
+
+  const ok = priceSew(code, fam, qty);
+  if (!ok.ok){ warnSewCustom.classList.remove('hidden'); return; }
+  warnSewCustom.classList.add('hidden');
+
+  const meta = SEWING_MAP[code];
+  const amount = ok.unit * qty;
+  sewCustomItems.push({code, name: meta.name, fam, qty, unit: ok.unit, amount});
+  renderSewTable(sewBodyCustom, sewCustomItems, sewListWrapCustom, 'custom');
+});
+
     sewBodyCustom.addEventListener('click',(e)=>{
       const d = e.target?.dataset?.del; if (!d) return;
       const [tag, idx] = d.split(':'); const i = Number(idx);
@@ -1194,5 +1208,6 @@
   </style>
 </body>
 </html>
+
 
 
