@@ -1,27 +1,1458 @@
-<label class="block text-sm font-medium">Pilih Material</label>
-<select id="r_material" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2">
-<option value="">— Pilih —</option>
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Noor Arfa – Quotation + Kos Jahit</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-900">
+  <main class="max-w-6xl mx-auto px-4 py-8">
+    <section class="bg-white shadow-sm rounded-2xl p-6">
+      <h2 class="text-lg font-semibold mb-4"># CUSTOMER INFORMATION</h2>
+      <form id="rfqForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="md:col-span-2">
+          <label for="fullName" class="block text-sm font-medium">Masukkan Full Name</label>
+          <input id="fullName" name="fullName" type="text" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2" />
+        </div>
+        <div>
+          <label for="email" class="block text-sm font-medium">Masukkan Email Address</label>
+          <input id="email" name="email" type="email" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2" />
+        </div>
+        <div>
+          <label for="phone" class="block text-sm font-medium">Masukkan Phone Number</label>
+          <input id="phone" name="phone" type="tel" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2" />
+        </div>
+        <div class="md:col-span-2">
+          <label for="company" class="block text-sm font-medium">Masukkan Nama Company/Organisasi</label>
+          <input id="company" name="company" type="text" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2" />
+        </div>
+        <div class="md:col-span-2">
+          <label for="address" class="block text-sm font-medium">Masukkan Alamat</label>
+          <textarea id="address" name="address" rows="3" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2"></textarea>
+        </div>
+
+        <!-- PIC -->
+        <div>
+          <label for="picName" class="block text-sm font-medium">Nama PIC</label>
+          <input id="picName" name="picName" type="text" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2" />
+        </div>
+        <div>
+          <label for="picRole" class="block text-sm font-medium">Jawatan</label>
+          <input id="picRole" name="picRole" type="text" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2" />
+        </div>
+
+        <div class="md:col-span-2 pt-4">
+          <h2 class="text-lg font-semibold mb-3"># SELECT YOUR BATIK PRODUCTS</h2>
+          <div class="flex flex-col sm:flex-row gap-3">
+            <label class="flex items-center gap-2 bg-gray-100 rounded-xl px-4 py-2">
+              <input type="radio" name="productMode" id="modeReady" value="ready" />
+              <span>Pilihan 1 — READY STOCK</span>
+            </label>
+            <label class="flex items-center gap-2 bg-gray-100 rounded-xl px-4 py-2">
+              <input type="radio" name="productMode" id="modeCustom" value="custom" />
+              <span>Pilihan 2 — CUSTOM (PRE ORDER)</span>
+            </label>
+            <label class="flex items-center gap-2 bg-gray-100 rounded-xl px-4 py-2">
+              <input type="radio" name="productMode" id="modeReadymade" value="readymade" />
+              <span>Pilihan 3 — READYMADE (PRE ORDER)</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- READY STOCK -->
+        <div id="readySection" class="md:col-span-2 hidden">
+          <div class="mt-4">
+            <label class="block text-sm font-medium mb-2">Payment Method</label>
+            <div class="flex flex-wrap gap-3">
+              <label class="flex items-center gap-2 bg-white border rounded-xl px-3 py-2 cursor-pointer">
+                <input type="radio" name="paymentMethodReady" value="Cash" />
+                <span>Cash</span>
+              </label>
+              <label class="flex items-center gap-2 bg-white border rounded-xl px-3 py-2 cursor-pointer">
+                <input type="radio" name="paymentMethodReady" value="E-Perolehan" />
+                <span>E-Perolehan</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Ready stock products -->
+          <div class="mt-6">
+            <div class="flex items-center justify-between gap-3">
+              <h3 class="font-semibold">Senarai Produk Ready Stock</h3>
+              <input id="readySearch" type="text" placeholder="Cari produk..." class="rounded-xl border-gray-300 px-3 py-2" />
+            </div>
+            <div id="readyList" class="grid sm:grid-cols-2 lg:grid-cols-2 gap-4 mt-4 max-h-[420px] overflow-auto pr-1"></div>
+          </div>
+
+          <!-- KOS JAHIT (READY) -->
+          <div class="mt-8">
+            <h3 class="font-semibold mb-2">Kos Jahit (Ready Stock)</h3>
+
+            <div class="grid md:grid-cols-4 gap-3">
+              <div class="md:col-span-2">
+                <label class="block text-sm font-medium">Cari Kod (cth: ZW1701)</label>
+                <input id="sewSearchReady" type="text" placeholder="Taip kod atau nama…" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2" />
+                <div id="sewSuggestReady" class="mt-1 max-h-40 overflow-auto border rounded-xl hidden bg-white"></div>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium">Material Fabric</label>
+                <select id="sewMaterialReady" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2">
+                  <option value="AUTO">Auto (dari pilihan kain)</option>
+                  <option value="TWILLY_VELVET">Twilly Velvet</option>
+                  <option value="MICRO_COTTON">Micro Cotton</option>
+                  <option value="MARIA_COTTON">Maria Cotton</option>
+                  <option value="DUBAI_CREPE">Dubai Crepe</option>
+                  <option value="ROYAL_SATIN">Royal Satin</option>
+                  <option value="PERSIAN_CREPE">Persian Crepe</option>
+                  <option value="PARIS_CREPE">Paris Crepe</option>
+                  <option value="ITALIAN_CREPE">Italian Crepe</option>
+                  <option value="SWISS_SATIN">Swiss Satin</option>
+                  <option value="FRENCH_CREPE">French Crepe</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium">Qty (min 5)</label>
+                <input id="sewQtyReady" type="number" min="1" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2" />
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3 mt-3">
+              <button id="btnAddSewReady" type="button" class="px-4 py-2 rounded-xl bg-gray-200">Tambah Kos Jahit</button>
+              <span id="warnSewReady" class="text-sm text-red-600 hidden">Kod tidak sesuai dengan material / tidak tersenarai.</span>
+            </div>
+
+            <div id="sewListWrapReady" class="mt-3 hidden">
+              <div class="overflow-auto border rounded-xl">
+                <table class="min-w-full text-sm">
+                  <thead class="bg-gray-100">
+                    <tr>
+                      <th class="text-left px-3 py-2">Kod</th>
+                      <th class="text-left px-3 py-2">Butiran</th>
+                      <th class="text-left px-3 py-2">Material</th>
+                      <th class="text-right px-3 py-2">Qty</th>
+                      <th class="text-right px-3 py-2">Harga/Unit</th>
+                      <th class="text-right px-3 py-2">Jumlah</th>
+                      <th class="px-3 py-2"></th>
+                    </tr>
+                  </thead>
+                  <tbody id="sewBodyReady"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ready totals + actions -->
+          <div id="breakdownWrap" class="mt-6 hidden">
+            <h4 class="font-semibold mb-2">Pecahan Item</h4>
+            <div class="overflow-auto border rounded-xl">
+              <table class="min-w-full text-sm">
+                <thead class="bg-gray-100">
+                  <tr>
+                    <th class="text-left px-3 py-2">Produk</th>
+                    <th class="text-left px-3 py-2">Warna</th>
+                    <th class="text-right px-3 py-2">Qty</th>
+                    <th class="text-right px-3 py-2">Harga/Unit</th>
+                    <th class="text-right px-3 py-2">Jumlah</th>
+                  </tr>
+                </thead>
+                <tbody id="breakdownBody"></tbody>
+              </table>
+            </div>
+
+            <div class="mt-4 grid sm:grid-cols-2 gap-4">
+              <div class="text-sm text-gray-600">
+                <p><span class="font-medium">Payment:</span> <span id="bdPayment">—</span></p>
+              </div>
+              <div class="text-sm text-gray-700 space-y-1">
+                <p class="flex justify-between"><span>Subtotal (Cash)</span> <span id="bdSubtotal" class="font-medium">RM0.00</span></p>
+                <p class="flex justify-between"><span>Caj E-Perolehan (15%)</span> <span id="bdFee" class="font-medium">RM0.00</span></p>
+                <p class="flex justify-between text-lg"><span class="font-semibold">Grand Total</span> <span id="bdGrand" class="font-semibold">RM0.00</span></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-3 mt-4">
+            <button id="btnTotal" type="button" class="px-4 py-2 rounded-xl bg-purple-700 text-white">TOTAL</button>
+            <button id="btnRFQ" type="button" class="px-4 py-2 rounded-xl bg-gray-900 text-white" disabled>REQUEST FOR QUOTATION</button>
+          </div>
+        </div>
+
+        <!-- CUSTOM (PRE ORDER) -->
+        <div id="customSection" class="md:col-span-2 hidden">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+            <div>
+              <label class="block text-sm font-medium">Pilih Material</label>
+              <select id="c_material" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2">
+                <option value="">— Pilih —</option>
                 <option>Paris Crepe</option>
                 <option>Dubai Polycot/Cotton Dubai</option>
                 <option>Luxe Satin/Satin Saluna</option>
                 <option>Royal Satin</option>
-                <option>Iris</option>
-                <option>Cotton Dubai</option>
-                <option>Belle</option>
-</select>
-</div>
-<div class="md:col-span-2">
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium">Masukkan Corak</label>
+              <input id="c_pattern" type="text" placeholder="Contoh: Songket Flora Geometri" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium">Pilih Warna</label>
+              <input id="c_color" type="text" placeholder="Contoh: Royal Blue" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium">Meter</label>
+              <input id="c_meter" type="number" min="0" step="0.5" placeholder="cth 4" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium">Quantity</label>
+              <input id="c_qty" type="number" min="1" placeholder="cth 10" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2" />
+            </div>
+
+            <div class="md:col-span-3">
+              <label class="block text-sm font-medium">Variasi Design</label>
+              <select id="c_variant" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2">
+                <option value="new">New Design (RM500)</option>
+                <option value="edit">Edit Design (RM150)</option>
+                <option value="recolor">Tukar Warna (RM50)</option>
+              </select>
+              <div class="mt-2 flex items-center gap-3">
+                <label class="flex items-center gap-2">
+                  <input id="c_add_logo" type="checkbox" /> <span class="text-sm">Tambah logo/nama sendiri (+RM100)</span>
+                </label>
+              </div>
+              <p class="text-xs text-gray-500 mt-1">Formula: caj design = harga variasi / qty; total (Cash) = (caj design × qty) + harga variasi (+RM100 jika tambah logo).</p>
+            </div>
+          </div>
+
+          <div class="md:col-span-2 mt-4">
+            <label class="block text-sm font-medium mb-2">Payment Method</label>
+            <div class="flex flex-wrap gap-3">
+              <label class="flex items-center gap-2 bg-white border rounded-xl px-3 py-2 cursor-pointer">
+                <input type="radio" name="paymentMethodCustom" value="Cash" />
+                <span>Cash</span>
+              </label>
+              <label class="flex items-center gap-2 bg-white border rounded-xl px-3 py-2 cursor-pointer">
+                <input type="radio" name="paymentMethodCustom" value="E-Perolehan" />
+                <span>E-Perolehan</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-3 mt-4">
+            <button id="btnAddCustom" type="button" class="px-4 py-2 rounded-xl bg-gray-200">Tambah Item</button>
+            <button id="btnTotalCustom" type="button" class="px-4 py-2 rounded-xl bg-purple-700 text-white">TOTAL</button>
+            <button id="btnRFQCustom" type="button" class="px-4 py-2 rounded-xl bg-gray-900 text-white" disabled>REQUEST FOR QUOTATION</button>
+          </div>
+
+          <div id="customListWrap" class="mt-4 hidden">
+            <h4 class="font-semibold mb-2">Senarai Custom Ditambah</h4>
+            <div class="overflow-auto border rounded-xl">
+              <table class="min-w-full text-sm">
+                <thead class="bg-gray-100">
+                  <tr>
+                    <th class="text-left px-3 py-2">#</th>
+                    <th class="text-left px-3 py-2">Butiran</th>
+                    <th class="text-right px-3 py-2">Qty</th>
+                    <th class="text-right px-3 py-2">Harga Variasi</th>
+                    <th class="text-right px-3 py-2">Caj Design</th>
+                    <th class="text-right px-3 py-2">Jumlah (Cash)</th>
+                    <th class="px-3 py-2"></th>
+                  </tr>
+                </thead>
+                <tbody id="customListBody"></tbody>
+              </table>
+            </div>
+
+            <div class="mt-4 grid sm:grid-cols-2 gap-4">
+              <div class="text-sm text-gray-600">
+                <p><span class="font-medium">Payment:</span> <span id="cbdPayment">—</span></p>
+              </div>
+              <div class="text-sm text-gray-700 space-y-1">
+                <p class="flex justify-between"><span>Subtotal (Cash)</span> <span id="cbdSubtotal" class="font-medium">RM0.00</span></p>
+                <p class="flex justify-between"><span>Caj E-Perolehan (15%)</span> <span id="cbdFee" class="font-medium">RM0.00</span></p>
+                <p class="flex justify-between text-lg"><span class="font-semibold">Grand Total</span> <span id="cbdGrand" class="font-semibold">RM0.00</span></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- KOS JAHIT (CUSTOM) -->
+          <div class="mt-8">
+            <h3 class="font-semibold mb-2">Kos Jahit (Custom / Pre-Order)</h3>
+
+            <div class="grid md:grid-cols-4 gap-3">
+              <div class="md:col-span-2">
+                <label class="block text-sm font-medium">Cari Kod (cth: ZW1701)</label>
+                <input id="sewSearchCustom" type="text" placeholder="Taip kod atau nama…" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2" />
+                <div id="sewSuggestCustom" class="mt-1 max-h-40 overflow-auto border rounded-xl hidden bg-white"></div>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium">Material Fabric</label>
+                <select id="sewMaterialCustom" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2">
+                  <option value="AUTO">Auto (dari pilihan kain)</option>
+                  <option>Paris Crepe</option>
+                  <option>Dubai Polycot/Cotton Dubai</option>
+                  <option>Luxe Satin/Satin Saluna</option>
+                  <option>Royal Satin</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium">Qty (min 5)</label>
+                <input id="sewQtyCustom" type="number" min="1" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2" />
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3 mt-3">
+              <button id="btnAddSewCustom" type="button" class="px-4 py-2 rounded-xl bg-gray-200">Tambah Kos Jahit</button>
+              <span id="warnSewCustom" class="text-sm text-red-600 hidden">Kod tidak sesuai dengan material / tidak tersenarai.</span>
+            </div>
+
+            <div id="sewListWrapCustom" class="mt-3 hidden">
+              <div class="overflow-auto border rounded-xl">
+                <table class="min-w-full text-sm">
+                  <thead class="bg-gray-100">
+                    <tr>
+                      <th class="text-left px-3 py-2">Kod</th>
+                      <th class="text-left px-3 py-2">Butiran</th>
+                      <th class="text-left px-3 py-2">Material</th>
+                      <th class="text-right px-3 py-2">Qty</th>
+                      <th class="text-right px-3 py-2">Harga/Unit</th>
+                      <th class="text-right px-3 py-2">Jumlah</th>
+                      <th class="px-3 py-2"></th>
+                    </tr>
+                  </thead>
+                  <tbody id="sewBodyCustom"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- READYMADE (PRE ORDER) -->
+        <div id="readymadeSection" class="md:col-span-2 hidden">
+          <!-- VARIASI (Tukar warna dsb) -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+            <div>
+              <label class="block text-sm font-medium">Pilih Material</label>
+              <select id="r_material" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2">
+                <option value="">— Pilih —</option>
+                <option>Paris Crepe</option>
+                <option>Dubai Polycot/Cotton Dubai</option>
+                <option>Luxe Satin/Satin Saluna</option>
+                <option>Royal Satin</option>
+              </select>
+            </div>
+            <div class="md:col-span-2">
               <label class="block text-sm font-medium">Variasi Design</label>
               <select id="r_variant" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2">
                 <option value="recolor">Tukar Warna (RM50)</option>
                 <option value="edit">Edit Design (RM150)</option>
                 <option value="new">New Design (RM500)</option>
               </select>
+              <div class="mt-2 flex items-center gap-3">
+                <label class="flex items-center gap-2">
+                  <input id="r_add_logo" type="checkbox" /> <span class="text-sm">Tambah logo/nama sendiri (+RM100)</span>
+                </label>
+              </div>
+              <p class="text-xs text-gray-500 mt-1">Formula: caj design = harga variasi / qty; total (Cash) = (caj design × qty) + harga variasi (+RM100 jika tambah logo).</p>
+            </div>
+          </div>
 
-<div class="mt-2 flex items-center gap-3">
-<label class="flex items-center gap-2">
-<input id="r_add_logo" type="checkbox" /> <span class="text-sm">Tambah logo/nama sendiri (+RM100)</span>
-@@ -1456,3 +1450,4 @@ <h2 class="text-xl font-bold text-center my-3">INVOICE</h2>
-</style>
+          <!-- Composer: Material + Kod (search) + Qty -->
+          <div class="mt-4 border rounded-xl p-4">
+            <div class="grid md:grid-cols-4 gap-3 items-end">
+              <div class="md:col-span-2">
+                <label class="block text-sm font-medium">Kod Readymade (boleh search)</label>
+                <input id="r_codeSearch" type="text" placeholder="Taip kod / nama..." class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2" />
+                <div id="r_codeSuggest" class="mt-1 max-h-48 overflow-auto border rounded-xl hidden bg-white"></div>
+              </div>
+              <div>
+                <label class="block text-sm font-medium">Quantity</label>
+                <input id="r_qty" type="number" min="1" placeholder="cth 10" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2" />
+              </div>
+              <div class="flex gap-2">
+                <button id="btnAddReadymade" type="button" class="w-full px-4 py-2 rounded-xl bg-gray-200">Tambah Item</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment -->
+          <div class="mt-4">
+            <label class="block text-sm font-medium mb-2">Payment Method</label>
+            <div class="flex flex-wrap gap-3">
+              <label class="flex items-center gap-2 bg-white border rounded-xl px-3 py-2 cursor-pointer">
+                <input type="radio" name="paymentMethodRM" value="Cash" />
+                <span>Cash</span>
+              </label>
+              <label class="flex items-center gap-2 bg-white border rounded-xl px-3 py-2 cursor-pointer">
+                <input type="radio" name="paymentMethodRM" value="E-Perolehan" />
+                <span>E-Perolehan</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- List -->
+          <div id="readymadeListWrap" class="mt-4 hidden">
+            <h4 class="font-semibold mb-2">Senarai Readymade (Pre-Order)</h4>
+            <div class="overflow-auto border rounded-xl">
+              <table class="min-w-full text-sm">
+                <thead class="bg-gray-100">
+                  <tr>
+                    <th class="text-left px-3 py-2">#</th>
+                    <th class="text-left px-3 py-2">Butiran</th>
+                    <th class="text-right px-3 py-2">Qty</th>
+                    <th class="text-right px-3 py-2">Harga Variasi</th>
+                    <th class="text-right px-3 py-2">Caj Design</th>
+                    <th class="text-right px-3 py-2">Jumlah (Cash)</th>
+                    <th class="px-3 py-2"></th>
+                  </tr>
+                </thead>
+                <tbody id="readymadeListBody"></tbody>
+              </table>
+            </div>
+
+            <div class="mt-4 grid sm:grid-cols-2 gap-4">
+              <div class="text-sm text-gray-600">
+                <p><span class="font-medium">Payment:</span> <span id="rbdPayment">—</span></p>
+              </div>
+              <div class="text-sm text-gray-700 space-y-1">
+                <p class="flex justify-between"><span>Subtotal (Cash)</span> <span id="rbdSubtotal" class="font-medium">RM0.00</span></p>
+                <p class="flex justify-between"><span>Caj E-Perolehan (15%)</span> <span id="rbdFee" class="font-medium">RM0.00</span></p>
+                <p class="flex justify-between text-lg"><span class="font-semibold">Grand Total</span> <span id="rbdGrand" class="font-semibold">RM0.00</span></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-3 mt-4">
+            <button id="btnTotalRM" type="button" class="px-4 py-2 rounded-xl bg-purple-700 text-white">TOTAL</button>
+            <button id="btnRFQRM" type="button" class="px-4 py-2 rounded-xl bg-gray-900 text-white" disabled>REQUEST FOR QUOTATION</button>
+          </div>
+
+          <!-- KOS JAHIT (READYMAD PRE-ORDER) -->
+          <div class="mt-8">
+            <h3 class="font-semibold mb-2">Kos Jahit (Readymade / Pre-Order)</h3>
+            <div class="grid md:grid-cols-4 gap-3">
+              <div class="md:col-span-2">
+                <label class="block text-sm font-medium">Cari Kod (cth: ZW1701)</label>
+                <input id="sewSearchRM" type="text" placeholder="Taip kod atau nama…" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2" />
+                <div id="sewSuggestRM" class="mt-1 max-h-40 overflow-auto border rounded-xl hidden bg-white"></div>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium">Material Fabric</label>
+                <select id="sewMaterialRM" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2">
+                  <option value="AUTO">Auto (ikut pilihan material di atas)</option>
+                  <option>Paris Crepe</option>
+                  <option>Dubai Polycot/Cotton Dubai</option>
+                  <option>Luxe Satin/Satin Saluna</option>
+                  <option>Royal Satin</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium">Qty (min 5)</label>
+                <input id="sewQtyRM" type="number" min="1" class="mt-1 w-full rounded-xl border-gray-300 px-3 py-2" />
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3 mt-3">
+              <button id="btnAddSewRM" type="button" class="px-4 py-2 rounded-xl bg-gray-200">Tambah Kos Jahit</button>
+              <span id="warnSewRM" class="text-sm text-red-600 hidden">Kod tidak sesuai dengan material / tidak tersenarai.</span>
+            </div>
+
+            <div id="sewListWrapRM" class="mt-3 hidden">
+              <div class="overflow-auto border rounded-xl">
+                <table class="min-w-full text-sm">
+                  <thead class="bg-gray-100">
+                    <tr>
+                      <th class="text-left px-3 py-2">Kod</th>
+                      <th class="text-left px-3 py-2">Butiran</th>
+                      <th class="text-left px-3 py-2">Material</th>
+                      <th class="text-right px-3 py-2">Qty</th>
+                      <th class="text-right px-3 py-2">Harga/Unit</th>
+                      <th class="text-right px-3 py-2">Jumlah</th>
+                      <th class="px-3 py-2"></th>
+                    </tr>
+                  </thead>
+                  <tbody id="sewBodyRM"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <!-- QUOTATION -->
+    <section id="quotationSection" class="bg-white shadow-sm rounded-2xl p-6 mt-8 hidden print:block">
+      <div class="text-center mb-2">
+        <img src="logo-noorarfa.jpg" alt="Noor Arfa" class="mx-auto h-10 mb-2">
+        <p class="font-semibold tracking-wide">NOOR ARFA ONLINE EMPIRE SDN BHD</p>
+        <p class="text-sm">202101009431 (1409730-X)</p>
+        <p class="text-sm">LOT 4153, KAWASAN PERINDUSTRIAN CHENDERING, 21080 KUALA TERENGGANU, TERENGGANU DARUL IMAN, MALAYSIA.</p>
+      </div>
+
+      <h2 class="text-xl font-bold text-center my-3">INVOICE</h2>
+
+      <div class="grid md:grid-cols-2 gap-4 text-sm mb-2">
+        <div class="border p-3 rounded">
+          <p id="qCustLine1">—</p>
+          <p id="qCustLine2">—</p>
+          <p id="qCustLine3">—</p>
+          <p id="qCustLine4">—</p>
+        </div>
+        <div class="border p-3 rounded">
+          <div class="flex justify-between"><span>INVOICE NO</span><span id="qInvNo">—</span></div>
+          <div class="flex justify-between"><span>DATE</span><span id="qDate">—</span></div>
+          <div class="flex justify-between"><span>REFERENCE</span><span id="qRef">—</span></div>
+          <div class="flex justify-between"><span>TERM</span><span id="qTerm">30 DAYS</span></div>
+          <div class="flex justify-between"><span>SALESPERSON</span><span id="qSales">CA</span></div>
+        </div>
+      </div>
+
+      <div class="overflow-auto border rounded-xl">
+        <table class="min-w-full text-sm invoice-table">
+          <thead>
+            <tr>
+              <th>NO</th>
+              <th>ITEM CODE</th>
+              <th>DESCRIPTION</th>
+              <th>QTY</th>
+              <th>UOM</th>
+              <th>UNIT PRICE</th>
+              <th>AMOUNT</th>
+            </tr>
+          </thead>
+          <tbody id="qBody"></tbody>
+        </table>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-4 mt-3 text-sm">
+        <div class="border rounded p-3">
+          <div class="flex items-start gap-2">
+            <span class="whitespace-nowrap">RINGGIT MALAYSIA:</span>
+            <span id="qInWords" class="font-medium">—</span>
+          </div>
+          <div class="mt-2 text-xs text-gray-500">Customer Signature/Customer's Stamp</div>
+        </div>
+        <div class="border rounded p-3">
+          <div class="flex justify-between"><span>DISCOUNT :</span><span id="qDiscount">0.00</span></div>
+          <div class="flex justify-between text-lg font-semibold mt-1"><span>TOTAL :</span><span id="qGrand">RM0.00</span></div>
+        </div>
+      </div>
+
+      <div class="mt-3 grid md:grid-cols-2 gap-6">
+        <div class="border rounded p-3">
+          <div class="h-20"></div>
+          <div class="border-t pt-2 text-sm">
+            <p class="text-gray-600">Customer Signature/Customer's Stamp</p>
+          </div>
+        </div>
+        <div class="border rounded p-3">
+          <div class="h-20"></div>
+          <div class="border-t pt-2 text-right text-sm">
+            <p id="qStaff">ANIS SOLEHAH (PEGAWAI WEBSITE)</p>
+            <p>NOOR ARFA HOLDINGS SDN BHD</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-right text-xs text-gray-500 mt-2">Page 1 of 1</div>
+
+      <div class="mt-4 no-print flex gap-3">
+        <button onclick="window.print()" class="px-4 py-2 rounded-xl bg-purple-700 text-white">Print / Save PDF</button>
+        <button id="btnSubmitOrder" class="px-4 py-2 rounded-xl bg-green-600 text-white" disabled>SUBMIT ORDER</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    /* =======================
+       CONFIG
+    ======================== */
+    const SHEETS_WEBAPP_URL = "PASTE_YOUR_APPS_SCRIPT_WEBAPP_URL_HERE";
+    const DEFAULT_SHIPPING_METHOD = "Courier";
+    const E_PEROLEHAN_RATE = 0.15;
+    const MIN_SEW_QTY = 5;
+
+    /* Ready stock products (unchanged) */
+    const READY_PRODUCTS = [
+      { name:"BATIK AYUNI (DUBAI CREPE)", colors:["Grey","Green","Pink","Royal Blue","Brick Red"], pricing:q=>(q>=10?90:q>=5?109:119) },
+      { name:"BATIK NURA (DUBAI CREPE)", colors:["Grey","Lavender","Pink","Olive Green","Royal Blue"], pricing:q=>(q>=10?90:q>=5?109:119) },
+      { name:"BATIK AFIYA (DUBAI CREPE)", colors:["Grey","Burgundy","Plum","Olive Green","Navy Blue"], pricing:q=>(q>=10?90:q>=5?109:119) },
+      { name:"BATIK MARSYA (DUBAI CREPE)", colors:["Moss Green","Red","Violet Purple","Royal Blue","Grey"], pricing:q=>(q>=10?90:q>=5?109:119) },
+      { name:"KAIN PASANG NONEE (ROYAL SATIN)", colors:["Emerald Green","Royal Blue"], pricing:q=>(q>=10?119:q>=5?139:159) },
+      { name:"KAIN PASANG NURISHA (ROYAL SATIN)", colors:["Black"], pricing:q=>109 },
+      { name:"KAIN PASANG MICRO COTTON - 4M BIDANG 60", colors:["Royal Blue"], pricing:q=>99 },
+      { name:"KAIN PASANG MARIA POLY COTTON - 4M BIDANG 59", colors:["Black"], pricing:q=>(q>=10?79:q>=5?89:99) },
+      { name:"KAIN PASANG PERSIAN CREPE - 4M BIDANG 60", colors:["Chili Red"], pricing:q=>99 },
+      { name:"KAIN PASANG PARIS CREPE BATIK SARA - 4M BIDANG 60", colors:["Maroon","Black"], pricing:q=>(q>=10?129:q>=5?139:149) },
+      { name:"KAIN PASANG HANIFARA (TWILLY VELVET) - 4M BIDANG 55", colors:["Light Pink","Matcha","Light Peach","Soft Grey","Sky Blue","Yellow","Butter Yellow","Peach Pink","Lilac","Orange"], pricing:q=>(q>=5?45:55) },
+      { name:"KAIN PASANG AIRA/ALYA/DHIA (ITALIAN CREPE) - 4M BIDANG 60", colors:["Maroon","Purple","Blue","Black","Greenish Yellow","Deep Blue","Green","Mustard"], pricing:q=>70 },
+      { name:"KAIN PASANG SWISS SATIN - 4M BIDANG 60", colors:["Royal Blue","Maroon","Emerald Green","Black","Soft Brown"], pricing:q=>(q>=10?99:q>=5?109:q>=3?119:129) },
+      { name:"KAIN PASANG LILY (FRENCH CREPE) - 4M BIDANG 60", colors:["Black","Maroon","Olive Green","Purple Violet","Rose Pink"], pricing:q=>(q>=10?89:99) },
+    ];
+
+    /* SKU map (unchanged from your version) */
+    const READY_SKU_MAP = {
+      "BATIK AYUNI (DUBAI CREPE)":{"Grey":"ZA3763","Green":"AYUNI-GREEN","Pink":"AYUNI-PINK","Royal Blue":"AYUNI-RBLUE","Brick Red":"AYUNI-BRED"},
+      "BATIK NURA (DUBAI CREPE)":{"Grey":"NURA-GREY","Lavender":"NURA-LAVENDER","Pink":"NURA-PINK","Olive Green":"NURA-OLIVE","Royal Blue":"NURA-RBLUE"},
+      "BATIK AFIYA (DUBAI CREPE)":{"Grey":"AFIYA-GREY","Burgundy":"AFIYA-BURG","Plum":"AFIYA-PLUM","Olive Green":"AFIYA-OLIVE","Navy Blue":"AFIYA-NAVY"},
+      "BATIK MARSYA (DUBAI CREPE)":{"Moss Green":"MARSYA-MOSS","Red":"MARSYA-RED","Violet Purple":"MARSYA-VIOLET","Royal Blue":"MARSYA-RBLUE","Grey":"MARSYA-GREY"},
+      "KAIN PASANG NONEE (ROYAL SATIN)":{"Emerald Green":"NONEE-EMERALD","Royal Blue":"NONEE-RBLUE"},
+      "KAIN PASANG NURISHA (ROYAL SATIN)":{"Black":"NURISHA-BLACK"},
+      "KAIN PASANG MICRO COTTON - 4M BIDANG 60":{"Royal Blue":"MC60-RBLUE"},
+      "KAIN PASANG MARIA POLY COTTON - 4M BIDANG 59":{"Black":"MARIA59-BLACK"},
+      "KAIN PASANG PERSIAN CREPE - 4M BIDANG 60":{"Chili Red":"PERSIAN60-CHILI"},
+      "KAIN PASANG PARIS CREPE BATIK SARA - 4M BIDANG 60":{"Maroon":"SARA60-MAROON","Black":"SARA60-BLACK"},
+      "KAIN PASANG HANIFARA (TWILLY VELVET) - 4M BIDANG 55":{"Light Pink":"HANIFARA55-LPINK","Matcha":"HANIFARA55-MATCHA","Light Peach":"HANIFARA55-LPEACH","Soft Grey":"HANIFARA55-SGREY","Sky Blue":"HANIFARA55-SKY","Yellow":"HANIFARA55-YELLOW","Butter Yellow":"HANIFARA55-BYELLOW","Peach Pink":"HANIFARA55-PEACHP","Lilac":"HANIFARA55-LILAC","Orange":"HANIFARA55-ORANGE"},
+      "KAIN PASANG AIRA/ALYA/DHIA (ITALIAN CREPE) - 4M BIDANG 60":{"Maroon":"AAD60-MAROON","Purple":"AAD60-PURPLE","Blue":"AAD60-BLUE","Black":"AAD60-BLACK","Greenish Yellow":"AAD60-GYELLOW","Deep Blue":"AAD60-DBLUE","Green":"AAD60-GREEN","Mustard":"AAD60-MUSTARD"},
+      "KAIN PASANG SWISS SATIN - 4M BIDANG 60":{"Royal Blue":"SWISS60-RBLUE","Maroon":"SWISS60-MAROON","Emerald Green":"SWISS60-EMERALD","Black":"SWISS60-BLACK","Soft Brown":"SWISS60-SBROWN"},
+      "KAIN PASANG LILY (FRENCH CREPE) - 4M BIDANG 60":{"Black":"LILY60-BLACK","Maroon":"LILY60-MAROON","Olive Green":"LILY60-OLIVE","Purple Violet":"LILY60-PVIOLET","Rose Pink":"LILY60-RPINK"}
+    };
+
+    /* Fabric family resolver */
+    const FAMILY_FROM_NAME = [
+      {key:'DUBAI CREPE', fam:'DUBAI_CREPE'},
+      {key:'ROYAL SATIN', fam:'ROYAL_SATIN'},
+      {key:'PERSIAN CREPE', fam:'PERSIAN_CREPE'},
+      {key:'PARIS CREPE', fam:'PARIS_CREPE'},
+      {key:'ITALIAN CREPE', fam:'ITALIAN_CREPE'},
+      {key:'SWISS SATIN', fam:'SWISS_SATIN'},
+      {key:'FRENCH CREPE', fam:'FRENCH_CREPE'},
+      {key:'MICRO COTTON', fam:'MICRO_COTTON'},
+      {key:'POLY COTTON', fam:'MICRO_COTTON'},
+      {key:'MARIA POLY COTTON', fam:'MARIA_COTTON'},
+      {key:'TWILLY VELVET', fam:'TWILLY_VELVET'},
+      // synonyms for custom/readymade names
+      {key:'POLYCOT', fam:'MICRO_COTTON'},
+      {key:'COTTON DUBAI', fam:'MICRO_COTTON'},
+      {key:'LUXE SATIN', fam:'ROYAL_SATIN'},
+      {key:'SALUNA', fam:'ROYAL_SATIN'},
+    ];
+
+    /* ====== KOS JAHIT (your version, unchanged values) ====== */
+    const SEWING_MAP = {
+      "ZW1501": { name:"Upah Jahit Kemeja L/PDK – S", prices:{ SATIN_CREPE:[109,75,60,55],  COTTON:[90,60,45,30]}},
+      "ZW1502": { name:"Upah Jahit Kemeja L/PDK – M", prices:{ SATIN_CREPE:[109,75,60,55],  COTTON:[90,60,45,30]}},
+      "ZW1503": { name:"Upah Jahit Kemeja L/PDK – L", prices:{ SATIN_CREPE:[109,75,60,55],  COTTON:[90,60,45,30]}},
+      "ZW1504": { name:"Upah Jahit Kemeja L/PDK – XL", prices:{ SATIN_CREPE:[109,75,60,55],  COTTON:[90,60,45,30]}},
+      "ZW1505": { name:"Upah Jahit Kemeja L/PDK – 2XL", prices:{ SATIN_CREPE:[119,85,70,65],  COTTON:[100,70,55,40]}},
+      "ZW1506": { name:"Upah Jahit Kemeja L/PDK – 3XL", prices:{ SATIN_CREPE:[119,85,70,65],  COTTON:[100,70,55,40]}},
+      "ZW1507": { name:"Upah Jahit Kemeja L/PDK – 4XL", prices:{ SATIN_CREPE:[119,85,70,65],  COTTON:[100,70,55,40]}},
+      "ZW1508": { name:"Upah Jahit Kemeja L/PDK – 5XL", prices:{ SATIN_CREPE:[119,85,70,65],  COTTON:[100,70,55,40]}},
+      "ZW1601": { name:"Upah Jahit Kemeja L/PJG – S", prices:{ SATIN_CREPE:[119,85,70,45],  COTTON:[100,70,55,40]}},
+      "ZW1602": { name:"Upah Jahit Kemeja L/PJG – M", prices:{ SATIN_CREPE:[119,85,70,45],  COTTON:[100,70,55,40]}},
+      "ZW1603": { name:"Upah Jahit Kemeja L/PJG – L", prices:{ SATIN_CREPE:[119,85,70,45],  COTTON:[100,70,55,40]}},
+      "ZW1604": { name:"Upah Jahit Kemeja L/PJG – XL", prices:{ SATIN_CREPE:[119,85,70,45],  COTTON:[100,70,55,40]}},
+      "ZW1605": { name:"Upah Jahit Kemeja L/PJG – 2XL", prices:{ SATIN_CREPE:[129,95,80,55],  COTTON:[110,80,65,50]}},
+      "ZW1606": { name:"Upah Jahit Kemeja L/PJG – 3XL", prices:{ SATIN_CREPE:[129,95,80,55],  COTTON:[110,80,65,50]}},
+      "ZW1607": { name:"Upah Jahit Kemeja L/PJG – 4XL", prices:{ SATIN_CREPE:[129,95,80,55],  COTTON:[110,80,65,50]}},
+      "ZW1701": { name:"Upah Jahit Baju Kurung (Pahang) – S", prices:{ SATIN_CREPE:[85,60,50,45],  COTTON:[75,55,45,40]}},
+      "ZW1702": { name:"Upah Jahit Baju Kurung (Pahang) – M", prices:{ SATIN_CREPE:[85,60,50,45],  COTTON:[75,55,45,40]}},
+      "ZW1703": { name:"Upah Jahit Baju Kurung (Pahang) – L", prices:{ SATIN_CREPE:[85,60,50,45],  COTTON:[75,55,45,40]}},
+      "ZW1704": { name:"Upah Jahit Baju Kurung (Pahang) – XL", prices:{ SATIN_CREPE:[85,60,50,45],  COTTON:[75,55,45,40]}},
+      "ZW1705": { name:"Upah Jahit Baju Kurung (Pahang) – 2XL", prices:{ SATIN_CREPE:[95,70,60,55],  COTTON:[85,65,55,50]}},
+      "ZW1706": { name:"Upah Jahit Baju Kurung (Pahang) – 3XL", prices:{ SATIN_CREPE:[95,70,60,55],  COTTON:[85,65,55,50]}},
+      "ZW1707": { name:"Upah Jahit Baju Kurung (Pahang) – 4XL", prices:{ SATIN_CREPE:[95,70,60,55],  COTTON:[85,65,55,50]}},
+      "ZW1708": { name:"Upah Jahit Baju Kurung (Pahang) – 5XL", prices:{ SATIN_CREPE:[95,70,60,55],  COTTON:[85,65,55,50]}},
+      "ZW1801": { name:"Upah Jahit Baju Kurung (Modern) – S", prices:{ SATIN_CREPE:[85,60,50,45], COTTON:[75,55,45,40]}},
+      "ZW1802": { name:"Upah Jahit Baju Kurung (Modern) – M", prices:{ SATIN_CREPE:[85,60,50,45], COTTON:[75,55,45,40]}},
+      "ZW1803": { name:"Upah Jahit Baju Kurung (Modern) – L", prices:{ SATIN_CREPE:[85,60,50,45], COTTON:[75,55,45,40]}},
+      "ZW1804": { name:"Upah Jahit Baju Kurung (Modern) – XL", prices:{ SATIN_CREPE:[85,60,50,45], COTTON:[75,55,45,40]}},
+      "ZW1805": { name:"Upah Jahit Baju Kurung (Modern) – 2XL", prices:{ SATIN_CREPE:[95,70,60,55], COTTON:[85,65,55,50]}},
+      "ZW1806": { name:"Upah Jahit Baju Kurung (Modern) – 3XL", prices:{ SATIN_CREPE:[95,70,60,55], COTTON:[85,65,55,50]}},
+      "ZW1807": { name:"Upah Jahit Baju Kurung (Modern) – 4XL", prices:{ SATIN_CREPE:[95,70,60,55], COTTON:[85,65,55,50]}},
+      "ZW1808": { name:"Upah Jahit Baju Kurung (Modern) – 5XL", prices:{ SATIN_CREPE:[95,70,60,55], COTTON:[85,65,55,50]}},
+    };
+
+    /* Readymade code directory (fill as needed for search UX) */
+    const READYM_CODES = [
+      // { code:'RM1001', name:'Kurung Readymade A' },
+      // { code:'RM1002', name:'Kurung Readymade B' },
+    ];
+
+    /* =======================
+       DOM REFS
+    ======================== */
+    const modeReady = document.getElementById('modeReady');
+    const modeCustom = document.getElementById('modeCustom');
+    const modeReadymade = document.getElementById('modeReadymade');
+    const readySection = document.getElementById('readySection');
+    const customSection = document.getElementById('customSection');
+    const readymadeSection = document.getElementById('readymadeSection');
+
+    const readyList = document.getElementById('readyList');
+    const readySearch = document.getElementById('readySearch');
+    const btnTotal = document.getElementById('btnTotal');
+    const btnRFQ = document.getElementById('btnRFQ');
+
+    const breakdownWrap = document.getElementById('breakdownWrap');
+    const breakdownBody = document.getElementById('breakdownBody');
+    const bdPayment = document.getElementById('bdPayment');
+    const bdSubtotal = document.getElementById('bdSubtotal');
+    const bdFee = document.getElementById('bdFee');
+    const bdGrand = document.getElementById('bdGrand');
+
+    const quotationSection = document.getElementById('quotationSection');
+    const qBody = document.getElementById('qBody');
+    const qInvNo = document.getElementById('qInvNo');
+    const qDate = document.getElementById('qDate');
+    const qRef = document.getElementById('qRef');
+    const qTerm = document.getElementById('qTerm');
+    const qSales = document.getElementById('qSales');
+    const qInWords = document.getElementById('qInWords');
+    const qGrand = document.getElementById('qGrand');
+
+    const btnSubmitOrder = document.getElementById('btnSubmitOrder');
+
+    /* Sew (Ready) */
+    const sewSearchReady = document.getElementById('sewSearchReady');
+    const sewSuggestReady = document.getElementById('sewSuggestReady');
+    const sewMaterialReady = document.getElementById('sewMaterialReady');
+    const sewQtyReady = document.getElementById('sewQtyReady');
+    const btnAddSewReady = document.getElementById('btnAddSewReady');
+    const warnSewReady = document.getElementById('warnSewReady');
+    const sewListWrapReady = document.getElementById('sewListWrapReady');
+    const sewBodyReady = document.getElementById('sewBodyReady');
+
+    /* Sew (Custom) */
+    const sewSearchCustom = document.getElementById('sewSearchCustom');
+    const sewSuggestCustom = document.getElementById('sewSuggestCustom');
+    const sewMaterialCustom = document.getElementById('sewMaterialCustom');
+    const sewQtyCustom = document.getElementById('sewQtyCustom');
+    const btnAddSewCustom = document.getElementById('btnAddSewCustom');
+    const warnSewCustom = document.getElementById('warnSewCustom');
+    const sewListWrapCustom = document.getElementById('sewListWrapCustom');
+    const sewBodyCustom = document.getElementById('sewBodyCustom');
+
+    /* Readymade (pre-order) */
+    const r_material = document.getElementById('r_material');
+    const r_variant  = document.getElementById('r_variant');
+    const r_add_logo = document.getElementById('r_add_logo');
+    const r_codeSearch = document.getElementById('r_codeSearch');
+    const r_codeSuggest = document.getElementById('r_codeSuggest');
+    const r_qty = document.getElementById('r_qty');
+    const btnAddReadymade = document.getElementById('btnAddReadymade');
+    const readymadeListWrap = document.getElementById('readymadeListWrap');
+    const readymadeListBody = document.getElementById('readymadeListBody');
+    const btnTotalRM = document.getElementById('btnTotalRM');
+    const btnRFQRM = document.getElementById('btnRFQRM');
+    const rbdPayment = document.getElementById('rbdPayment');
+    const rbdSubtotal = document.getElementById('rbdSubtotal');
+    const rbdFee = document.getElementById('rbdFee');
+    const rbdGrand = document.getElementById('rbdGrand');
+
+    /* Sew (Readymade) */
+    const sewSearchRM = document.getElementById('sewSearchRM');
+    const sewSuggestRM = document.getElementById('sewSuggestRM');
+    const sewMaterialRM = document.getElementById('sewMaterialRM');
+    const sewQtyRM = document.getElementById('sewQtyRM');
+    const btnAddSewRM = document.getElementById('btnAddSewRM');
+    const warnSewRM = document.getElementById('warnSewRM');
+    const sewListWrapRM = document.getElementById('sewListWrapRM');
+    const sewBodyRM = document.getElementById('sewBodyRM');
+
+    /* Custom (existing) */
+    const VARIANT_PRICE = { new:500, edit:150, recolor:50 };
+
+    const btnAddCustom = document.getElementById('btnAddCustom');
+    const btnTotalCustom = document.getElementById('btnTotalCustom');
+    const btnRFQCustom = document.getElementById('btnRFQCustom');
+    const customListWrap = document.getElementById('customListWrap');
+    const customListBody = document.getElementById('customListBody');
+    const cbdPayment = document.getElementById('cbdPayment');
+    const cbdSubtotal = document.getElementById('cbdSubtotal');
+    const cbdFee = document.getElementById('cbdFee');
+    const cbdGrand = document.getElementById('cbdGrand');
+
+    const c_material = document.getElementById('c_material');
+    const c_pattern  = document.getElementById('c_pattern');
+    const c_color    = document.getElementById('c_color');
+    const c_meter    = document.getElementById('c_meter');
+    const c_qty      = document.getElementById('c_qty');
+    const c_variant  = document.getElementById('c_variant');
+    const c_add_logo = document.getElementById('c_add_logo');
+
+    /* =======================
+       STATE
+    ======================== */
+    const fmtRM = n => 'RM' + Number(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    let LAST_ORDER_PAYLOAD = null;
+    let customItems = [];
+    let sewReadyItems = [];
+    let sewCustomItems = [];
+    let readymadeItems = [];
+    let sewRMItems = [];
+
+    /* =======================
+       HELPERS
+    ======================== */
+    function toggleSections() {
+      const mode = document.querySelector('input[name="productMode"]:checked')?.value;
+      readySection.classList.toggle('hidden', mode !== 'ready');
+      customSection.classList.toggle('hidden', mode !== 'custom');
+      readymadeSection.classList.toggle('hidden', mode !== 'readymade');
+    }
+    modeReady.addEventListener('change', toggleSections);
+    modeCustom.addEventListener('change', toggleSections);
+    modeReadymade.addEventListener('change', toggleSections);
+
+    function priceHint(prod){
+      const s1 = prod.pricing(1), s5 = prod.pricing(5), s10 = prod.pricing(10);
+      if (s1 !== s5 || s5 !== s10) return `Harga: 1–4 ${fmtRM(s1)} | 5–9 ${fmtRM(s5)} | ≥10 ${fmtRM(s10)}`;
+      return "Harga: " + fmtRM(s1) + " /pasang";
+    }
+    function buildProductCard(prod, index) {
+      const card = document.createElement('div');
+      card.className = "border rounded-xl p-4 bg-white";
+      card.dataset.index = index;
+      card.innerHTML = `
+        <p class="font-semibold mb-2">${prod.name}</p>
+        <label class="block text-sm font-medium">Pilih Warna</label>
+        <select class="w-full border rounded-xl mb-2 px-3 py-2">
+          ${prod.colors.map(c=>`<option>${c}</option>`).join('')}
+        </select>
+        <p class="text-sm mb-2 text-gray-700">${priceHint(prod)}</p>
+        <label class="block text-sm font-medium">Quantity</label>
+        <input type="number" min="0" placeholder="0" class="w-full border rounded-xl px-3 py-2" />
+      `;
+      return card;
+    }
+    function renderProducts(list = READY_PRODUCTS) {
+      readyList.innerHTML = list.map((p,i)=>buildProductCard(p,i).outerHTML).join('');
+    }
+    renderProducts();
+    readySearch?.addEventListener('input', () => {
+      const q = readySearch.value.toLowerCase();
+      const filtered = READY_PRODUCTS.filter(p => p.name.toLowerCase().includes(q));
+      renderProducts(filtered);
+    });
+
+    function currentPayment() {
+      return document.querySelector('input[name="paymentMethodReady"]:checked')?.value || null;
+    }
+    function collectSelections() {
+      const cards = [...readyList.querySelectorAll('[data-index]')];
+      const items = [];
+      cards.forEach(card => {
+        const idx = Number(card.dataset.index);
+        const prod = READY_PRODUCTS[idx];
+        const color = card.querySelector('select').value;
+        const qtyVal = Number(card.querySelector('input[type="number"]').value || 0);
+        if (qtyVal > 0) {
+          const unit = prod.pricing(qtyVal);
+          const amount = unit * qtyVal;
+          const sku = (READY_SKU_MAP[prod.name] && READY_SKU_MAP[prod.name][color]) || makeFallbackSKU(prod.name, color);
+          items.push({ name: prod.name, color, qty: qtyVal, unit, amount, sku });
+        }
+      });
+      return items;
+    }
+    function computeTotals(allItems, payment) {
+      const subtotal = allItems.reduce((s,i)=> s + i.amount, 0);
+      const fee = payment === 'E-Perolehan' ? subtotal * E_PEROLEHAN_RATE : 0;
+      const grand = subtotal + fee;
+      return { subtotal, fee, grand };
+    }
+
+    /* ===== Sewing price engine ===== */
+    function detectFamilyFromReady() {
+      const cards = [...readyList.querySelectorAll('[data-index]')];
+      let bestFam = null, bestQty = 0;
+      for (const card of cards) {
+        const idx = Number(card.dataset.index);
+        const prod = READY_PRODUCTS[idx];
+        const qtyVal = Number(card.querySelector('input[type="number"]').value || 0);
+        if (qtyVal > 0) {
+          const nm = prod.name.toUpperCase();
+          for (const m of FAMILY_FROM_NAME) {
+            if (nm.includes(m.key)) {
+              if (qtyVal > bestQty) { bestQty = qtyVal; bestFam = m.fam; }
+              break;
+            }
+          }
+        }
+      }
+      return bestFam;
+    }
+
+    function materialToFamily(materialStr){
+      const s = (materialStr||'').toUpperCase();
+      for (const m of FAMILY_FROM_NAME) if (s.includes(m.key)) return m.fam;
+      return s;
+    }
+    function familyGroup(fam){
+      if (['TWILLY_VELVET','MICRO_COTTON','MARIA_COTTON'].includes(fam)) return 'COTTON';
+      return 'SATIN_CREPE';
+    }
+    function tierIndex(q){
+      if (q>=500) return 3;
+      if (q>=100) return 2;
+      if (q>=20)  return 1;
+      if (q>=5)   return 0;
+      return -1;
+    }
+    function priceSew(code, fabricFam, qty){
+      const row = SEWING_MAP[code];
+      if (!row) return {ok:false, reason:'NOT_FOUND'};
+      const grp = familyGroup(fabricFam);
+      const arr = row.prices[grp] || [];
+      const ti = tierIndex(qty);
+      if (ti<0) return {ok:false, reason:'MIN_QTY'};
+      if (!arr.length || arr[ti]==null) return {ok:false, reason:'NOT_LISTING'};
+      return {ok:true, unit: Number(arr[ti])};
+    }
+    function searchSew(keyword){
+      const k = (keyword||'').trim().toUpperCase();
+      if (!k) return [];
+      const out = [];
+      for (const [code, meta] of Object.entries(SEWING_MAP)) {
+        if (code.includes(k) || meta.name.toUpperCase().includes(k)) out.push({code, ...meta});
+      }
+      return out.slice(0,30);
+    }
+    function renderSewSuggest(dom, list){
+      if (!list.length){ dom.classList.add('hidden'); dom.innerHTML=''; return; }
+      dom.classList.remove('hidden');
+      dom.innerHTML = list.map(it=>`
+        <button type="button" data-code="${it.code}"
+          class="w-full text-left px-3 py-2 hover:bg-gray-50 border-b">
+          <span class="font-medium">${it.code}</span> — ${it.name}
+        </button>`).join('');
+    }
+
+    /* ===== READY: sew add/list ===== */
+    sewSearchReady.addEventListener('input', ()=>{
+      renderSewSuggest(sewSuggestReady, searchSew(sewSearchReady.value));
+    });
+    sewSuggestReady.addEventListener('click',(e)=>{
+      const code = e.target?.closest('button')?.dataset?.code;
+      if (!code) return;
+      sewSearchReady.value = code;
+      sewSuggestReady.innerHTML=''; sewSuggestReady.classList.add('hidden');
+    });
+    btnAddSewReady.addEventListener('click', ()=>{
+      const code = (sewSearchReady.value||'').trim().toUpperCase();
+      const qty = Number(sewQtyReady.value||0);
+      let fam = sewMaterialReady.value;
+      if (fam==='AUTO') fam = detectFamilyFromReady() || 'DUBAI_CREPE';
+      const ok = priceSew(code, fam, qty);
+      if (!ok.ok){ warnSewReady.classList.remove('hidden'); return; }
+      warnSewReady.classList.add('hidden');
+      const meta = SEWING_MAP[code];
+      const amount = ok.unit * qty;
+      sewReadyItems.push({code, name: meta.name, fam, qty, unit: ok.unit, amount});
+      renderSewTable(sewBodyReady, sewReadyItems, sewListWrapReady, 'ready');
+    });
+    function renderSewTable(tbody, list, wrap, tag){
+      tbody.innerHTML = list.map((it,idx)=>`
+        <tr>
+          <td class="px-3 py-2">${it.code}</td>
+          <td class="px-3 py-2">${it.name}</td>
+          <td class="px-3 py-2">${it.fam}</td>
+          <td class="px-3 py-2 text-right">${it.qty}</td>
+          <td class="px-3 py-2 text-right">${fmtRM(it.unit)}</td>
+          <td class="px-3 py-2 text-right">${fmtRM(it.amount)}</td>
+          <td class="px-3 py-2 text-right">
+            <button class="text-red-600 underline" data-del="${tag}:${idx}">Delete</button>
+          </td>
+        </tr>`).join('');
+      wrap.classList.toggle('hidden', list.length===0);
+    }
+    sewBodyReady.addEventListener('click',(e)=>{
+      const d = e.target?.dataset?.del; if (!d) return;
+      const [tag, idx] = d.split(':'); const i = Number(idx);
+      if (tag==='ready'){ sewReadyItems.splice(i,1); renderSewTable(sewBodyReady, sewReadyItems, sewListWrapReady, 'ready'); }
+    });
+
+    /* ===== CUSTOM: add item ===== */
+    function addCustomItem(){
+      const qty = Number(c_qty.value || 0);
+      const meter = Number(c_meter.value || 0);
+      if (!c_material.value || !c_pattern.value || !c_color.value || !qty || qty<=0) {
+        alert('Sila lengkapkan Material, Corak, Warna dan Quantity (>0).');
+        return;
+      }
+      const base = VARIANT_PRICE[c_variant.value] || 0;
+      const addLogo = c_add_logo.checked ? 100 : 0;
+      const vp = base + addLogo;
+      const designCharge = qty ? (vp / qty) : 0;
+      const totalCash = (designCharge * qty) + vp;
+
+      customItems.push({
+        material: c_material.value,
+        pattern: c_pattern.value,
+        color: c_color.value,
+        meter,
+        qty,
+        variant: c_variant.value,
+        variantText: c_variant.options[c_variant.selectedIndex].text + (c_add_logo.checked ? ' + Logo (RM100)' : ''),
+        variantPrice: vp,
+        designCharge,
+        totalCash
+      });
+
+      c_meter.value = ''; c_qty.value = '';
+      renderCustomList();
+    }
+    function renderCustomList(){
+      customListBody.innerHTML = customItems.map((it,idx)=>`
+        <tr>
+          <td class="px-3 py-2">${idx+1}</td>
+          <td class="px-3 py-2">
+            <div class="font-medium">${it.material} — ${it.pattern} (${it.color})</div>
+            <div class="text-xs text-gray-500">Meter: ${it.meter || 0} | Variasi: ${it.variantText}</div>
+          </td>
+          <td class="px-3 py-2 text-right">${it.qty}</td>
+          <td class="px-3 py-2 text-right">${fmtRM(it.variantPrice)}</td>
+          <td class="px-3 py-2 text-right">${fmtRM(it.designCharge)}</td>
+          <td class="px-3 py-2 text-right">${fmtRM(it.totalCash)}</td>
+          <td class="px-3 py-2 text-right">
+            <button class="text-red-600 underline" data-del="${idx}">Delete</button>
+          </td>
+        </tr>`).join('');
+      customListWrap.classList.toggle('hidden', customItems.length===0);
+      btnRFQCustom.disabled = customItems.length===0;
+    }
+    customListBody.addEventListener('click', (e)=>{
+      const idx = e.target?.dataset?.del;
+      if (idx !== undefined) {
+        customItems.splice(Number(idx), 1);
+        renderCustomList();
+      }
+    });
+    function computeTotalsCustom(items, payment){
+      const subtotal = items.reduce((s,i)=> s + i.totalCash, 0);
+      const fee = payment === 'E-Perolehan' ? subtotal * E_PEROLEHAN_RATE : 0;
+      const grand = subtotal + fee;
+      return {subtotal, fee, grand};
+    }
+    document.getElementById('btnAddCustom')?.addEventListener('click', addCustomItem);
+    document.getElementById('btnTotalCustom')?.addEventListener('click', () => {
+      const pay = document.querySelector('input[name="paymentMethodCustom"]:checked')?.value || null;
+      if (!pay) { alert('Sila pilih Payment Method (Cash atau E-Perolehan).'); return; }
+      const totals = computeTotalsCustom(customItems, pay);
+      cbdPayment.textContent = pay;
+      cbdSubtotal.textContent = fmtRM(totals.subtotal);
+      cbdFee.textContent = fmtRM(totals.fee);
+      cbdGrand.textContent = fmtRM(totals.grand);
+      if (customItems.length) { customListWrap.classList.remove('hidden'); customListWrap.scrollIntoView({behavior:'smooth'}); }
+    });
+
+    /* ===== CUSTOM: sew add/list ===== */
+    sewSearchCustom.addEventListener('input', ()=>{
+      renderSewSuggest(sewSuggestCustom, searchSew(sewSearchCustom.value));
+    });
+    sewSuggestCustom.addEventListener('click',(e)=>{
+      const code = e.target?.closest('button')?.dataset?.code;
+      if (!code) return;
+      sewSearchCustom.value = code;
+      sewSuggestCustom.innerHTML=''; sewSuggestCustom.classList.add('hidden');
+    });
+    btnAddSewCustom.addEventListener('click', ()=>{
+      const code = (sewSearchCustom.value||'').trim().toUpperCase();
+      const qty  = Number(sewQtyCustom.value||0);
+      let fam    = sewMaterialCustom.value;
+      if (fam === 'AUTO') fam = materialToFamily(c_material.value) || 'PARIS_CREPE';
+      const ok = priceSew(code, fam, qty);
+      if (!ok.ok){ warnSewCustom.classList.remove('hidden'); return; }
+      warnSewCustom.classList.add('hidden');
+      const meta = SEWING_MAP[code];
+      const amount = ok.unit * qty;
+      sewCustomItems.push({code, name: meta.name, fam, qty, unit: ok.unit, amount});
+      renderSewTable(sewBodyCustom, sewCustomItems, sewListWrapCustom, 'custom');
+    });
+    sewBodyCustom.addEventListener('click',(e)=>{
+      const d = e.target?.dataset?.del; if (!d) return;
+      const [tag, idx] = d.split(':'); const i = Number(idx);
+      if (tag==='custom'){ sewCustomItems.splice(i,1); renderSewTable(sewBodyCustom, sewCustomItems, sewListWrapCustom, 'custom'); }
+    });
+
+    /* ===== READYMADES: code search helper ===== */
+    function searchRMCode(keyword){
+      const k = (keyword||'').trim().toUpperCase();
+      if (!k) return [];
+      return READYM_CODES.filter(x =>
+        x.code.toUpperCase().includes(k) || (x.name||'').toUpperCase().includes(k)
+      ).slice(0,50);
+    }
+    r_codeSearch.addEventListener('input', ()=>{
+      const list = searchRMCode(r_codeSearch.value);
+      if (!list.length){ r_codeSuggest.classList.add('hidden'); r_codeSuggest.innerHTML=''; return; }
+      r_codeSuggest.classList.remove('hidden');
+      r_codeSuggest.innerHTML = list.map(it=>`
+        <button type="button" data-code="${it.code}" class="w-full text-left px-3 py-2 hover:bg-gray-50 border-b">
+          <span class="font-medium">${it.code}</span> — ${(it.name||'').trim()}
+        </button>`).join('');
+    });
+    r_codeSuggest.addEventListener('click',(e)=>{
+      const code = e.target?.closest('button')?.dataset?.code;
+      if (!code) return;
+      r_codeSearch.value = code;
+      r_codeSuggest.innerHTML=''; r_codeSuggest.classList.add('hidden');
+    });
+
+    /* ===== READYMADES: add item / list / totals ===== */
+    function addReadymadeItem(){
+      const material = r_material.value;
+      const code = (r_codeSearch.value||'').trim().toUpperCase();
+      const qty = Number(r_qty.value||0);
+      if (!material || !code || !qty || qty<=0) {
+        alert('Sila lengkapkan Material, Kod dan Quantity (>0).'); return;
+      }
+      const base = VARIANT_PRICE[r_variant.value] || 0;
+      const addLogo = r_add_logo.checked ? 100 : 0;
+      const vp = base + addLogo;
+      const designCharge = vp / qty;
+      const totalCash = (designCharge * qty) + vp;
+
+      readymadeItems.push({
+        material, code, qty,
+        variant: r_variant.value,
+        variantText: r_variant.options[r_variant.selectedIndex].text + (r_add_logo.checked ? ' + Logo (RM100)' : ''),
+        variantPrice: vp,
+        designCharge,
+        totalCash
+      });
+
+      r_qty.value = ''; r_codeSearch.value = '';
+      renderReadymadeList();
+    }
+    function renderReadymadeList(){
+      readymadeListBody.innerHTML = readymadeItems.map((it,idx)=>`
+        <tr>
+          <td class="px-3 py-2">${idx+1}</td>
+          <td class="px-3 py-2">
+            <div class="font-medium">${it.material} — Kod: ${it.code}</div>
+            <div class="text-xs text-gray-500">Variasi: ${it.variantText}</div>
+          </td>
+          <td class="px-3 py-2 text-right">${it.qty}</td>
+          <td class="px-3 py-2 text-right">${fmtRM(it.variantPrice)}</td>
+          <td class="px-3 py-2 text-right">${fmtRM(it.designCharge)}</td>
+          <td class="px-3 py-2 text-right">${fmtRM(it.totalCash)}</td>
+          <td class="px-3 py-2 text-right">
+            <button class="text-red-600 underline" data-del-rm="${idx}">Delete</button>
+          </td>
+        </tr>`).join('');
+      readymadeListWrap.classList.toggle('hidden', readymadeItems.length===0);
+      btnRFQRM.disabled = readymadeItems.length===0 && sewRMItems.length===0;
+    }
+    readymadeListBody.addEventListener('click', (e)=>{
+      const idx = e.target?.dataset?.delRm;
+      if (idx !== undefined) {
+        readymadeItems.splice(Number(idx), 1);
+        renderReadymadeList();
+      }
+    });
+    btnAddReadymade.addEventListener('click', addReadymadeItem);
+
+    function computeTotalsRM(items, payment){
+      const subtotal = items.reduce((s,i)=> s + i.totalCash, 0);
+      const fee = payment === 'E-Perolehan' ? subtotal * E_PEROLEHAN_RATE : 0;
+      const grand = subtotal + fee;
+      return {subtotal, fee, grand};
+    }
+    btnTotalRM.addEventListener('click', ()=>{
+      const pay = document.querySelector('input[name="paymentMethodRM"]:checked')?.value || null;
+      if (!pay) { alert('Sila pilih Payment Method (Cash atau E-Perolehan).'); return; }
+      const totalsOnlyRM = computeTotalsRM(readymadeItems, pay);
+      rbdPayment.textContent = pay;
+      rbdSubtotal.textContent = fmtRM(totalsOnlyRM.subtotal);
+      rbdFee.textContent = fmtRM(totalsOnlyRM.fee);
+      rbdGrand.textContent = fmtRM(totalsOnlyRM.grand);
+      if (readymadeItems.length) { readymadeListWrap.classList.remove('hidden'); readymadeListWrap.scrollIntoView({behavior:'smooth'}); }
+    });
+
+    /* ===== READYMADES: sew add/list ===== */
+    sewSearchRM.addEventListener('input', ()=>{
+      renderSewSuggest(sewSuggestRM, searchSew(sewSearchRM.value));
+    });
+    sewSuggestRM.addEventListener('click',(e)=>{
+      const code = e.target?.closest('button')?.dataset?.code;
+      if (!code) return;
+      sewSearchRM.value = code;
+      sewSuggestRM.innerHTML=''; sewSuggestRM.classList.add('hidden');
+    });
+    btnAddSewRM.addEventListener('click', ()=>{
+      const code = (sewSearchRM.value||'').trim().toUpperCase();
+      const qty  = Number(sewQtyRM.value||0);
+      let fam    = sewMaterialRM.value;
+      if (fam === 'AUTO') fam = materialToFamily(r_material.value) || 'PARIS_CREPE';
+      const ok = priceSew(code, fam, qty);
+      if (!ok.ok){ warnSewRM.classList.remove('hidden'); return; }
+      warnSewRM.classList.add('hidden');
+      const meta = SEWING_MAP[code];
+      const amount = ok.unit * qty;
+      sewRMItems.push({code, name: meta.name, fam, qty, unit: ok.unit, amount});
+      renderSewTable(sewBodyRM, sewRMItems, sewListWrapRM, 'rm');
+      btnRFQRM.disabled = readymadeItems.length===0 && sewRMItems.length===0;
+    });
+    sewBodyRM.addEventListener('click',(e)=>{
+      const d = e.target?.dataset?.del; if (!d) return;
+      const [tag, idx] = d.split(':'); const i = Number(idx);
+      if (tag==='rm'){ sewRMItems.splice(i,1); renderSewTable(sewBodyRM, sewRMItems, sewListWrapRM, 'rm'); }
+      btnRFQRM.disabled = readymadeItems.length===0 && sewRMItems.length===0;
+    });
+
+    /* ===== Totals & RFQ (READY) ===== */
+    function updateBreakdownUI(productItems, sewItems, totals, payment) {
+      const prodRows = productItems.map(it=>`
+        <tr>
+          <td class="px-3 py-2">${it.name}</td>
+          <td class="px-3 py-2">${it.color}</td>
+          <td class="px-3 py-2 text-right">${it.qty}</td>
+          <td class="px-3 py-2 text-right">${fmtRM(it.unit)}</td>
+          <td class="px-3 py-2 text-right">${fmtRM(it.amount)}</td>
+        </tr>`).join('');
+      const sewRows = sewItems.map(it=>`
+        <tr>
+          <td class="px-3 py-2">[KOS JAHIT] ${it.name} (${it.code})</td>
+          <td class="px-3 py-2">${it.fam}</td>
+          <td class="px-3 py-2 text-right">${it.qty}</td>
+          <td class="px-3 py-2 text-right">${fmtRM(it.unit)}</td>
+          <td class="px-3 py-2 text-right">${fmtRM(it.amount)}</td>
+        </tr>`).join('');
+      breakdownBody.innerHTML = prodRows + sewRows;
+
+      bdPayment.textContent = payment || '—';
+      bdSubtotal.textContent = fmtRM(totals.subtotal);
+      bdFee.textContent = fmtRM(totals.fee);
+      bdGrand.textContent = fmtRM(totals.grand);
+      breakdownWrap.classList.toggle('hidden', productItems.length + sewItems.length === 0);
+      btnRFQ.disabled = (productItems.length + sewItems.length === 0);
+    }
+
+    btnTotal.addEventListener('click', () => {
+      const pay = currentPayment();
+      const prods = collectSelections();
+      const all = [...prods, ...sewReadyItems];
+      const totals = computeTotals(all, pay);
+      updateBreakdownUI(prods, sewReadyItems, totals, pay);
+      if (all.length) breakdownWrap.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    /* ===== Quotation + Send ===== */
+    function populateQuotation(items, totals, payment) {
+      const name = document.getElementById('fullName').value || '';
+      const company = document.getElementById('company').value || '';
+      const address = (document.getElementById('address').value || '').split('\n');
+      const email = document.getElementById('email').value || '';
+      const phone = document.getElementById('phone').value || '';
+      const picName = document.getElementById('picName')?.value || '';
+      const picRole = document.getElementById('picRole')?.value || '';
+
+      document.getElementById('qCustLine1').textContent = company || name || '—';
+      document.getElementById('qCustLine2').textContent = address[0] || '—';
+      document.getElementById('qCustLine3').textContent = address[1] || (email ? email : '—');
+      document.getElementById('qCustLine4').textContent = phone ? phone : (address[2]||'—');
+
+      const now = new Date(); const pad = n => String(n).padStart(2,'0');
+      qInvNo.textContent = `IV-NAE${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}${pad(now.getHours())}${pad(now.getMinutes())}`;
+      qDate.textContent = `${pad(now.getDate())}/${pad(now.getMonth()+1)}/${now.getFullYear()} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+      qRef.textContent = payment || 'CASH';
+      qTerm.textContent = '30 DAYS';
+      qSales.textContent = 'CA';
+
+      qBody.innerHTML = items.map((it, idx)=>`
+        <tr>
+          <td>${idx+1}</td>
+          <td>${it.sku || it.code || '—'}</td>
+          <td>${it.desc}</td>
+          <td class="text-right">${it.qty}</td>
+          <td>UNIT</td>
+          <td class="text-right">${fmtRM(it.unit)}</td>
+          <td class="text-right">${fmtRM(it.amount)}</td>
+        </tr>`).join('');
+
+      qInWords.textContent = totals.grand>0 ? (toWordsEN(Math.round(totals.grand)) + ' RINGGIT ONLY') : '—';
+      qGrand.textContent = fmtRM(totals.grand);
+      document.getElementById('qDiscount').textContent = '0.00';
+
+      document.getElementById('qStaff').textContent =
+        (picName && picRole) ? `${picName.toUpperCase()} (${picRole.toUpperCase()})`
+                             : 'ANIS SOLEHAH (PEGAWAI WEBSITE)';
+
+      quotationSection.classList.remove('hidden');
+      quotationSection.scrollIntoView({ behavior: 'smooth' });
+    }
+    function toWordsEN(num){
+      const a=["","ONE","TWO","THREE","FOUR","FIVE","SIX","SEVEN","EIGHT","NINE","TEN","ELEVEN","TWELVE","THIRTEEN","FOURTEEN","FIFTEEN","SIXTEEN","SEVENTEEN","EIGHTEEN","NINETEEN"];
+      const b=["","","TWENTY","THIRTY","FORTY","FIFTY","SIXTY","SEVENTY","EIGHTY","NINETY"];
+      const g=[""," THOUSAND"," MILLION"," BILLION"];
+      if(num===0) return "ZERO";
+      let words="", i=0;
+      while(num>0){
+        let chunk = num%1000;
+        if(chunk){
+          let str="";
+          if(chunk>99){ str+=a[Math.floor(chunk/100)]+" HUNDRED "; chunk%=100; }
+          if(chunk>19){ str+=b[Math.floor(chunk/10)]+" "; chunk%=10; }
+          if(chunk>0){ str+=a[chunk]+" "; }
+          words = str.trim()+g[i]+" "+words;
+        }
+        num=Math.floor(num/1000); i++;
+      }
+      return words.trim();
+    }
+
+    async function sendToSheets(payload) {
+      try {
+        const res = await fetch(SHEETS_WEBAPP_URL, {
+          method: 'POST',
+          headers: {'Content-Type': 'text/plain'},
+          body: JSON.stringify(payload)
+        });
+        let msg = 'Order dihantar ke Google Sheets.';
+        try { const data = await res.json(); if (data?.ok && data?.orderId) msg = `Order dihantar! Order ID: ${data.orderId}`; } catch(_) {}
+        alert(msg);
+      } catch (err) {
+        console.error(err);
+        alert('Maaf, gagal hantar ke Google Sheets. Cuba lagi.');
+      }
+    }
+    function collectCustomerForPayload(){
+      const addr = (document.getElementById('address').value || '').split('\n');
+      return {
+        fullName: document.getElementById('fullName').value || '',
+        email: document.getElementById('email').value || '',
+        phone: document.getElementById('phone').value || '',
+        company: document.getElementById('company').value || '',
+        address_line1: addr[0] || '',
+        address_line2: addr[1] || '',
+        address_line3: addr.length>2 ? addr.slice(2).join(' ') : ''
+      };
+    }
+
+    /* READY → RFQ */
+    btnRFQ.addEventListener('click', () => {
+      const pay = currentPayment();
+      const prods = collectSelections();
+      const all = [...prods, ...sewReadyItems];
+      if (!all.length) { alert('Sila masukkan sekurang-kurangnya satu item.'); return; }
+      const totals = computeTotals(all, pay);
+
+      const itemsForInvoice = [
+        ...prods.map(i => ({ sku: i.sku, desc: i.name + (i.color ? ` (${i.color})` : ''), qty: i.qty, unit: i.unit, amount: i.amount })),
+        ...sewReadyItems.map(s => ({ code: s.code, desc: `[KOS JAHIT] ${s.name} (${s.fam})`, qty: s.qty, unit: s.unit, amount: s.amount }))
+      ];
+
+      const customer = collectCustomerForPayload();
+      LAST_ORDER_PAYLOAD = {
+        source: "noorarfa-rfq",
+        mode: "ready",
+        payment_method: pay || "Cash",
+        shipping_method: DEFAULT_SHIPPING_METHOD,
+        items: [
+          ...prods.map(i => ({ sku: i.sku, name: i.name + (i.color ? ` (${i.color})` : ''), qty: i.qty, unit_price: i.unit, amount: i.amount })),
+          ...sewReadyItems.map(s => ({ sku: s.code, name: `[KOS JAHIT] ${s.name} (${s.fam})`, qty: s.qty, unit_price: s.unit, amount: s.amount }))
+        ],
+        totals,
+        customer
+      };
+
+      populateQuotation(itemsForInvoice, totals, pay);
+      btnSubmitOrder.disabled = false;
+    });
+
+    /* CUSTOM → RFQ */
+    btnRFQCustom?.addEventListener('click', () => {
+      const pay = document.querySelector('input[name="paymentMethodCustom"]:checked')?.value || null;
+      if (!customItems.length && !sewCustomItems.length) { alert('Sila tambah item custom atau kos jahit.'); return; }
+
+      const totals = computeTotals(
+        [...customItems.map(ci => ({amount:ci.totalCash})), ...sewCustomItems.map(s => ({amount:s.amount}))],
+        pay
+      );
+
+      const itemsForInvoice = [
+        ...customItems.map(ci => ({ code:'', desc:`${ci.material} – ${ci.pattern} (${ci.color}) [${ci.variantText}]`, qty: ci.qty, unit: ci.designCharge, amount: ci.totalCash })),
+        ...sewCustomItems.map(s => ({ code:s.code, desc:`[KOS JAHIT] ${s.name} (${s.fam})`, qty:s.qty, unit:s.unit, amount:s.amount }))
+      ];
+
+      const customer = collectCustomerForPayload();
+      LAST_ORDER_PAYLOAD = {
+        source: "noorarfa-rfq",
+        mode: "custom",
+        payment_method: pay || "Cash",
+        shipping_method: DEFAULT_SHIPPING_METHOD,
+        items: [
+          ...customItems.map(ci => ({ sku:'', name:`${ci.material} – ${ci.pattern} (${ci.color}) [${ci.variantText}]`, qty: ci.qty, unit_price: ci.designCharge, amount: ci.totalCash })),
+          ...sewCustomItems.map(s => ({ sku:s.code, name:`[KOS JAHIT] ${s.name} (${s.fam})`, qty:s.qty, unit_price:s.unit, amount:s.amount }))
+        ],
+        totals,
+        customer
+      };
+
+      populateQuotation(itemsForInvoice, totals, pay);
+      btnSubmitOrder.disabled = false;
+    });
+
+    /* READYMADES → RFQ */
+    btnRFQRM.addEventListener('click', () => {
+      const pay = document.querySelector('input[name="paymentMethodRM"]:checked')?.value || null;
+      if (!readymadeItems.length && !sewRMItems.length) { alert('Sila tambah item readymade atau kos jahit.'); return; }
+
+      const totals = computeTotals(
+        [...readymadeItems.map(it => ({amount:it.totalCash})), ...sewRMItems.map(s => ({amount:s.amount}))],
+        pay
+      );
+
+      const itemsForInvoice = [
+        ...readymadeItems.map(it => ({ code: it.code, desc:`[READYMAD PRE-ORDER] ${it.material} – Kod ${it.code} [${it.variantText}]`, qty: it.qty, unit: it.designCharge, amount: it.totalCash })),
+        ...sewRMItems.map(s => ({ code:s.code, desc:`[KOS JAHIT] ${s.name} (${s.fam})`, qty:s.qty, unit:s.unit, amount:s.amount }))
+      ];
+
+      const customer = collectCustomerForPayload();
+      LAST_ORDER_PAYLOAD = {
+        source: "noorarfa-rfq",
+        mode: "readymade",
+        payment_method: pay || "Cash",
+        shipping_method: DEFAULT_SHIPPING_METHOD,
+        items: [
+          ...readymadeItems.map(it => ({ sku: it.code, name:`[READYMAD PRE-ORDER] ${it.material} – Kod ${it.code} [${it.variantText}]`, qty: it.qty, unit_price: it.designCharge, amount: it.totalCash })),
+          ...sewRMItems.map(s => ({ sku:s.code, name:`[KOS JAHIT] ${s.name} (${s.fam})`, qty:s.qty, unit_price:s.unit, amount:s.amount }))
+        ],
+        totals,
+        customer
+      };
+
+      populateQuotation(itemsForInvoice, totals, pay);
+      btnSubmitOrder.disabled = false;
+    });
+
+    /* SUBMIT ORDER → Google Sheets */
+    btnSubmitOrder.addEventListener('click', async () => {
+      if (!LAST_ORDER_PAYLOAD) { alert('Sila jana quotation dahulu.'); return; }
+      const ok = confirm('Hantar order ini ke Noor Arfa (Google Sheets)?');
+      if (!ok) return;
+      await sendToSheets(LAST_ORDER_PAYLOAD);
+    });
+
+    function makeFallbackSKU(productName, color){
+      const p = (productName||'').replace(/[^A-Z0-9]+/gi,' ').trim().split(/\s+/).map(w=>w[0]).join('').toUpperCase();
+      const c = (color||'').replace(/\s+/g,'').replace(/[^A-Za-z0-9]/g,'').toUpperCase();
+      return (p? p : 'SKU') + '-' + (c? c : 'NA');
+    }
+
+    /* default tab */
+    modeReady.checked = true; toggleSections();
+  </script>
+
+  <style>
+    .invoice-table { border-collapse: collapse; width: 100%; }
+    .invoice-table th, .invoice-table td { border-top: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb; padding: 8px 10px; }
+    .invoice-table thead th { background:#f3f4f6; text-align:left; }
+    #sewSuggestReady button, #sewSuggestCustom button, #sewSuggestRM button, #r_codeSuggest button { font-size: 0.875rem; }
+    @media print {
+      body * { visibility: hidden !important; }
+      #quotationSection, #quotationSection * { visibility: visible !important; }
+      #quotationSection { position: absolute; left:0; top:0; width:100%; box-shadow:none !important; border-radius:0 !important; }
+      .no-print { display:none !important; }
+    }
+  </style>
 </body>
 </html>
